@@ -70,6 +70,7 @@ export const AuthProvider = ({ children }) => {
           setError(null); // Clear any previous error
         } else {
           setError(response.error);
+          return response;
         }
       })
       .catch((err) => {

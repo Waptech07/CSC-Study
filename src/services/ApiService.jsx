@@ -11,7 +11,7 @@ const ApiService = {
       const response = await axios.post(apiUrl, { email, password }, { headers, timeout: 10000 });
       return response.status >= 200 && response.status < 300
         ? { success: true, data: response.data }
-        : { success: false, error: response.data.message };
+        : { success: false, error: response.data };
     } catch (error) {
       console.error("Network error:", error);
       return { success: false, error: error.response?.data?.error || "Network error" };
@@ -22,15 +22,15 @@ const ApiService = {
     const apiUrl = `${baseUrl}register/`;
     const headers = { "Content-Type": "application/json" };
     const body = { name, email, password, password2: confirmPassword };
-
+  
     try {
       const response = await axios.post(apiUrl, body, { headers, timeout: 10000 });
       return response.status >= 200 && response.status < 300
         ? { success: true, data: response.data }
-        : { success: false, error: response.data.message || response.data.non_field_errors };
+        : { success: false, error: response.data };
     } catch (error) {
       console.error("Network error:", error);
-      return { success: false, error: error.response?.data?.error || error.response?.data?.email || error.response?.data?.password || "Network error" };
+      return { success: false, error: error.response?.data || "Network error" };
     }
   },
 
