@@ -1,8 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { Menu, MenuItem, IconButton, Typography, Button } from "@mui/material";
+import { Menu, MenuItem, IconButton, Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CloseIcon from "@mui/icons-material/Close";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -65,7 +66,7 @@ const NavBar = () => {
             CSC Study
           </Link>
         </div>
-        <div className="hidden md:flex space-x-10">
+        <div className="hidden lg:flex space-x-10">
           <NavLink
             to="/"
             className={`text-gray-800 font-bold text-xl uppercase ${
@@ -99,14 +100,11 @@ const NavBar = () => {
             Contact
           </NavLink>
         </div>
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="hidden lg:flex items-center space-x-4">
           {isAuthenticated ? (
             <div className="flex items-center">
               <img
-                src={
-                  `http://127.0.0.1:8000${user?.profile_picture}` ||
-                  "default-profile-picture-url"
-                }
+                src={`http://127.0.0.1:8000${user?.profile_picture}`}
                 alt="User"
                 className="w-10 h-10 rounded-full cursor-pointer"
                 onClick={handleProfileMenuOpen}
@@ -121,7 +119,7 @@ const NavBar = () => {
                   onClick={() => {
                     handleMobileMenuClose();
                     handleMenuClose();
-                    navigate("/profile");
+                    navigate("/profile/details");
                   }}
                 >
                   Profile
@@ -157,7 +155,7 @@ const NavBar = () => {
             </>
           )}
         </div>
-        <div className="md:hidden flex items-center">
+        <div className="lg:hidden flex items-center">
           <IconButton onClick={handleMobileMenuToggle}>
             {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
           </IconButton>
@@ -169,7 +167,7 @@ const NavBar = () => {
             initial={{ opacity: 0, x: "-100%" }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "-100%" }}
-            className="md:hidden fixed inset-0 bg-white shadow-md z-20"
+            className="lg:hidden fixed inset-0 bg-white shadow-md z-20"
           >
             <div className="container mx-auto px-4 py-5 flex flex-col justify-start items-start h-full w-full">
               <div className="flex justify-between text-center mb-6">
@@ -231,13 +229,13 @@ const NavBar = () => {
                   <NavLink
                     onClick={handleProfileMenuOpen}
                     className={`flex items-center justify-between py-2 text-gray-800 font-semibold text-xl capitalize pl-5 w-full hover:bg-blue-500 hover:text-white transition duration-300 ${
-                      isActive("/profile") &&
+                      isActive("/profile/details") &&
                       "bg-blue-500 text-white hover:bg-blue-600"
                     }`}
                   >
                     Profile
                     <IconButton className="pr-40">
-                      <MenuIcon />
+                      <KeyboardArrowDownIcon/>
                     </IconButton>
                   </NavLink>
                 </>
