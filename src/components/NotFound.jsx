@@ -4,7 +4,7 @@ import notFound from '../assets/not-found.png'; // Ensure you have an illustrati
 
 const NotFound = () => {
   return (
-    <div className="flex items-center justify-center mb-20 bg-gray-100">
+    <div className="flex items-center justify-center mb-20 -mt-14 bg-gray-100">
       <div className="text-center">
         <img
           src={notFound}
