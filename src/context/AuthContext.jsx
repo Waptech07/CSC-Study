@@ -41,7 +41,6 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await ApiService.login(email, password);
-      console.log("Login response:", response); // Log the response
       if (response.success) {
         localStorage.setItem("access_token", response.data.token.access);
         localStorage.setItem("refresh_token", response.data.token.refresh);
@@ -79,9 +78,39 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
+  const forgotPassword = async (email) => {
+    try {
+      const response = await ApiService.forgotPassword(email);
+      return response;
+    } catch (err) {
+      setError("Failed to send password reset email");
+      throw err;
+    }
+  };
+
+  const resetPassword = async (uid, token, newPassword) => {
+    try {
+      const response = await ApiService.resetPassword(uid, token, newPassword);
+      return response;
+    } catch (err) {
+      setError("Failed to reset password");
+      throw err;
+    }
+  };
+
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, user, login, register, logout, error }}
+      value={{
+        isAuthenticated,
+        user,
+        setUser,
+        login,
+        register,
+        forgotPassword,
+        resetPassword,
+        logout,
+        error,
+      }}
     >
       {children}
     </AuthContext.Provider>
