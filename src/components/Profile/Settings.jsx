@@ -10,10 +10,11 @@ import {
   TextField,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { toast } from "react-toastify";
+import ApiService from "../../services/ApiService";
 
 const Settings = () => {
-  const { user, updateUser, changePassword } = useContext(AuthContext);
-
+  const { user, setUser } = useContext(AuthContext); // Use setUser to update user context
   const [name, setName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
   const [profession, setProfession] = useState(user?.profession || "");
@@ -25,25 +26,76 @@ const Settings = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
 
-  const handleUpdateChanges = () => {
+  const handleUpdateChanges = async () => {
     const updatedUser = {
       name,
       email,
       profession,
       address,
       nationality,
-      profile_picture: profilePicture,
     };
-    updateUser(updatedUser);
+
+    try {
+      const response = await ApiService.updateProfile(updatedUser);
+      if (response.success) {
+        setUser(response.data); // Update user in context
+        toast.success("Profile updated successfully");
+      } else {
+        handleErrors(response.error);
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating profile");
+    }
   };
 
-  const handlePasswordChange = () => {
-    changePassword(oldPassword, newPassword);
-  };
-
-  const handleProfilePictureChange = (e) => {
+  const handleProfilePictureChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
-      setProfilePicture(e.target.files[0]);
+      const formData = new FormData();
+      formData.append("profile_picture", e.target.files[0]);
+      try {
+        const response = await ApiService.updateProfileImage(formData);
+        if (response.success) {
+          setUser(formData);
+          setProfilePicture(e.target.files[0]);
+          toast.success("Profile picture updated successfully");
+        } else {
+          handleErrors(response.error);
+        }
+      } catch (error) {
+        toast.error("hello");
+      }
+    }
+  };
+
+  const handlePasswordChange = async () => {
+    if (newPassword !== confirmNewPassword) {
+      toast.error("New passwords do not match");
+      return;
+    }
+    const response = await ApiService.changePassword(
+      oldPassword,
+      newPassword,
+      confirmNewPassword
+    );
+    if (response.success) {
+      toast.success("Password changed successfully");
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
+    } else {
+      handleErrors(response.error);
+    }
+  };
+
+  const handleErrors = (error) => {
+    if (typeof error === "string") {
+      toast.error(error);
+    } else if (typeof error === "object") {
+      Object.values(error)
+        .flat()
+        .forEach((message) => toast.error(message, { autoClose: 2000 }));
+    } else {
+      toast.error("An unexpected error occurred");
     }
   };
 
