@@ -1,8 +1,40 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import ApiService from "../../services/ApiService";
+import { toast } from "react-toastify";
+import { Button, TextField } from "@mui/material";
 
 const MyProfile = () => {
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
+  const [bio, setBio] = useState(user?.bio || "");
+
+  const handleErrors = (error) => {
+    if (typeof error === "string") {
+      toast.error(error);
+    } else if (typeof error === "object") {
+      Object.values(error)
+        .flat()
+        .forEach((message) => toast.error(message, { autoClose: 2000 }));
+    } else {
+      toast.error("An unexpected error occurred");
+    }
+  };
+
+  const handleBioChanges = async () => {
+    const updatedUser = { bio };
+
+    try {
+      const response = await ApiService.updateProfile(updatedUser);
+      if (response.success) {
+        setUser(response.data); // Update user in context
+        toast.success("Profile updated successfully");
+      } else {
+        handleErrors(response.error);
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating profile");
+    }
+  };
 
   return (
     <section>
@@ -10,12 +42,31 @@ const MyProfile = () => {
         <div className="bg-white rounded-md shadow-lg w-full lg:w-1/2 p-5 lg:p-10">
           <h2 className="text-2xl text-blue-600 font-bold mb-2">About Me</h2>
           <p className="text-base text-gray-400">
-            Hello my name is Tanya. I am a designer. My personal qualities are
-            responsibility, as I bring everything to its logical conclusion,
-            determination, never rest on my laurels, always open to change and
-            something new. In my arsenal there are such programs as Adobe
-            Photoshop, Illustrator, InDesign, Figma, also some Maya, 3ds Max
-            ZBrush, Substance Painter, Marvelous Designer.
+            {user?.bio || (
+              <>
+                <div>
+                  <TextField
+                    placeholder="Add your Bio"
+                    fullWidth
+                    label="About Me"
+                    multiline
+                    minRows={3}
+                    maxRows={4}
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                  />
+                </div>
+                <div className="flex justify-end items-center mt-2">
+                  <Button
+                    variant="contained"
+                    sx={{ flex: 0.3 }}
+                    onClick={handleBioChanges}
+                  >
+                    Update Changes
+                  </Button>
+                </div>
+              </>
+            )}
           </p>
         </div>
         <div className="bg-white rounded-md shadow-lg w-full lg:w-1/2 p-5 lg:p-10">
