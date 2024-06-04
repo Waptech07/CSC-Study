@@ -179,7 +179,7 @@ const ApiService = {
   },
 
   async resetPassword(uid, token, newPassword) {
-    const apiUrl = `${baseUrl}reset-password/`;
+    const apiUrl = `${baseUrl}reset-password/${uid}/${token}/`;
     const headers = { "Content-Type": "application/json" };
     const body = {
       uid,
