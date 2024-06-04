@@ -9,7 +9,7 @@ const ExpertInstructors = () => {
       <section>
         <div className="flex flex-col md:flex-row items-center justify-center pt-10 pb-20 md:pb-28">
           <motion.div className="w-full md:w-1/2">
-            <img src={instructorImage} alt="Instructor" className="w-full" />
+            <img src={instructorImage} alt="Instructor" loading="lazy" className="w-full" />
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 50 }}

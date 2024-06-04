@@ -68,6 +68,7 @@ const OurPopularCourses = () => {
                   src={courseImage}
                   alt="Course"
                   className="w-full object-cover"
+                  loading="lazy"
                 />
                 <div className="p-4">
                   <h3 className="text-xl font-semibold mb-2 capitalize">

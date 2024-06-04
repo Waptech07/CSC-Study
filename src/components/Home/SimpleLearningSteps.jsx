@@ -78,7 +78,7 @@ const SimpleLearningSteps = () => {
               alt="Hero2"
               className="absolute md:-top-12 top-2 left-64 z-[5]"
             />
-            <img src={heroImage2} alt="Hero2" className="rounded-lg z-[4]" />
+            <img src={heroImage2} alt="Hero2" className="rounded-lg z-[4]" loading="lazy"/>
             <img
               src={l04}
               alt="Hero2"

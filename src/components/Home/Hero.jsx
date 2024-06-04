@@ -35,7 +35,7 @@ const Hero = () => {
             transition={{ duration: 1 }}
             className="w-full md:w-1/2 md:block hidden"
           >
-            <img src={heroImage} alt="Hero" />
+            <img src={heroImage} alt="Hero" loading="lazy" />
           </motion.div>
         </div>
       </section>
