@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { PiBookOpenTextThin } from "react-icons/pi";
 import { RiShieldCheckLine } from "react-icons/ri";
@@ -6,6 +6,7 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 const ProfilePage = () => {
   const { user } = useContext(AuthContext);
+  const [profilePicture, setProfilePicture] = useState(null);
   const location = useLocation();
 
   const isActive = (path) => {
@@ -19,7 +20,11 @@ const ProfilePage = () => {
           <div className="flex mt-5 items-center gap-3">
             <div>
               <img
-                src={`http://127.0.0.1:8000${user?.profile_picture}`}
+                src={
+                  profilePicture
+                    ? URL.createObjectURL(profilePicture)
+                    : `http://127.0.0.1:8000${user?.profile_picture}`
+                }
                 alt="User"
                 className="w-12 h-12 md:w-14 md:h-14 rounded-full border cursor-pointer"
               />
