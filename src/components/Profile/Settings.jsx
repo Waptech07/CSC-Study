@@ -18,6 +18,7 @@ const Settings = () => {
   const [name, setName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
   const [profession, setProfession] = useState(user?.profession || "");
+  const [phone, setPhone] = useState(user?.phone || "");
   const [address, setAddress] = useState(user?.address || "");
   const [nationality, setNationality] = useState(user?.nationality || "");
   const [oldPassword, setOldPassword] = useState("");
@@ -33,6 +34,7 @@ const Settings = () => {
       profession,
       address,
       nationality,
+      phone,
     };
 
     try {
@@ -126,17 +128,25 @@ const Settings = () => {
               />
             </div>
             <TextField
-              placeholder="Profession"
-              fullWidth
-              value={profession}
-              onChange={(e) => setProfession(e.target.value)}
-            />
-            <TextField
               placeholder="Address"
               fullWidth
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
+            <div className="flex lg:flex-col flex-row gap-5">
+              <TextField
+                placeholder="Profession"
+                fullWidth
+                value={profession}
+                onChange={(e) => setProfession(e.target.value)}
+              />
+              <TextField
+                placeholder="Phone"
+                fullWidth
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
             <div className="flex lg:flex-col flex-row gap-5 w-full">
               <TextField
                 placeholder="Nationality"
