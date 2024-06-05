@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { TextField, Button, Typography } from "@mui/material";
+import { TextField, Button, Typography, Checkbox, FormControlLabel } from "@mui/material";
 import { motion } from "framer-motion";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
@@ -14,6 +14,7 @@ const Register = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+  const [isInstructor, setIsInstructor] = useState(false);
   const [errors, setErrors] = useState({});
 
   if (isAuthenticated) {
@@ -30,7 +31,7 @@ const Register = () => {
     }
 
     try {
-      const response = await register(name, email, password, password2);
+      const response = await register(name, email, password, password2, isInstructor);
 
       if (response.success) {
         toast.success("Registration successful!", { autoClose: 2000 });
@@ -50,7 +51,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center pt-10 bg-gray-100">
+    <div className="flex flex-col items-center justify-center pt-6 bg-gray-100">
       <motion.div
         className="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl"
         initial={{ opacity: 0, scale: 0.8 }}
@@ -68,10 +69,10 @@ const Register = () => {
           />
         </div>
         <div className="w-full md:w-1/2 p-8">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-4">
             Register
           </h2>
-          <form className="flex flex-col gap-6" onSubmit={handleRegister}>
+          <form className="flex flex-col gap-5" onSubmit={handleRegister}>
             <TextField
               label="Name"
               variant="outlined"
@@ -109,6 +110,17 @@ const Register = () => {
               onChange={(e) => setPassword2(e.target.value)}
               error={!!errors.password2}
               helperText={errors.password2 ? errors.password2 : ""}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={isInstructor}
+                  onChange={(e) => setIsInstructor(e.target.checked)}
+                  name="isInstructor"
+                  color="primary"
+                />
+              }
+              label="Register as Instructor"
             />
             <Button variant="contained" color="primary" fullWidth type="submit">
               Register
