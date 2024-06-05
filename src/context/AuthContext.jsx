@@ -58,8 +58,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = (name, email, password, confirmPassword) => {
-    return ApiService.register(name, email, password, confirmPassword)
+  const register = (name, email, password, confirmPassword, isInstructor) => {
+    return ApiService.register(
+      name,
+      email,
+      password,
+      confirmPassword,
+      isInstructor
+    )
       .then((response) => {
         if (response.success) {
           localStorage.setItem("access_token", response.data.token.access);

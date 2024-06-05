@@ -25,10 +25,16 @@ const ApiService = {
     }
   },
 
-  async register(name, email, password, confirmPassword) {
+  async register(name, email, password, confirmPassword, isInstructor) {
     const apiUrl = `${baseUrl}register/`;
     const headers = { "Content-Type": "application/json" };
-    const body = { name, email, password, password2: confirmPassword };
+    const body = {
+      name,
+      email,
+      password,
+      password2: confirmPassword,
+      is_instructor: isInstructor,
+    };
 
     try {
       const response = await axios.post(apiUrl, body, {
@@ -84,7 +90,7 @@ const ApiService = {
       });
       return response.status >= 200 && response.status < 300
         ? { success: true, data: response.data }
-        : { success: false, error: response.data};
+        : { success: false, error: response.data };
     } catch (error) {
       console.error("Network error:", error);
       return {
