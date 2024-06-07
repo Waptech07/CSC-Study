@@ -1,13 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { PiBookOpenTextThin } from "react-icons/pi";
 import { RiShieldCheckLine } from "react-icons/ri";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [profilePicture, setProfilePicture] = useState(null);
   const location = useLocation();
+
+  useEffect(() => {
+    if (user.is_instructor) {
+      navigate("/my-profile");
+    }
+  }, [user, navigate]);
 
   const isActive = (path) => {
     return location.pathname === path;
@@ -65,7 +72,7 @@ const ProfilePage = () => {
         </div>
         <div className="flex w-full justify-evenly pb-1">
           {[
-            { to: "/profile/details", label: "My Profile" },
+            { to: "/profile", label: "My Profile" },
             { to: "/profile/all-courses", label: "All Courses" },
             { to: "/profile/active-courses", label: "Active Courses" },
             { to: "/profile/completed-courses", label: "Completed Courses" },
