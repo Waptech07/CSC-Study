@@ -40,7 +40,7 @@ const ViewInstructor = () => {
                   : "https://via.placeholder.com/150"
               }
               className="rounded-full w-60 h-60"
-              alt="profile-image"
+              alt="profile"
             />
             <div className="flex flex-col justify-center items-center">
               <p className="text-black font-bold text-3xl">
