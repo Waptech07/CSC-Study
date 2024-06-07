@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { TextField, Button, Typography, Checkbox, FormControlLabel } from "@mui/material";
 import { motion } from "framer-motion";
 import { AuthContext } from "../../context/AuthContext";
@@ -17,9 +17,11 @@ const Register = () => {
   const [isInstructor, setIsInstructor] = useState(false);
   const [errors, setErrors] = useState({});
 
-  if (isAuthenticated) {
-    navigate("/");
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/profile");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -51,7 +53,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center pt-6 bg-gray-100">
+    <div className="flex flex-col items-center justify-center py-5 bg-gray-100">
       <motion.div
         className="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl"
         initial={{ opacity: 0, scale: 0.8 }}
