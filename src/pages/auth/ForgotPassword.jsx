@@ -1,13 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TextField, Button, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ApiService from "../../services/ApiService";
+import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
+  const { isAuthenticated} = useContext(AuthContext);
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [errors, setErrors] = useState({});
+  
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/profile");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleForgotPassword = async () => {
     try {
@@ -16,7 +27,11 @@ const ForgotPassword = () => {
         toast.success("Password reset email sent");
         setMessage("Password reset email sent. Please check your inbox.");
       } else {
-        toast.error(response.error || "Failed to send password reset email");
+        setErrors(response.error);
+        const errorMessages = Object.values(response.error).flat();
+        errorMessages.forEach((message) =>
+          toast.error(message, { autoClose: 2000 })
+        );
       }
     } catch (err) {
       toast.error("Please Check Your Internet Connection");
@@ -24,7 +39,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center pt-20 bg-gray-100">
+    <div className="flex flex-col items-center justify-center py-20 bg-gray-100">
       <motion.div
         className="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden max-w-lg"
         initial={{ opacity: 0, scale: 0.8 }}
