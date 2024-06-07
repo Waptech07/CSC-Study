@@ -15,7 +15,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/");
+      navigate("/profile");
     }
   }, [isAuthenticated, navigate]);
 
@@ -34,7 +34,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center pt-20 bg-gray-100">
+    <div className="flex flex-col items-center justify-center py-20 bg-gray-100">
       <motion.div
         className="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl"
         initial={{ opacity: 0, scale: 0.8 }}
@@ -74,7 +74,10 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Link to="/forgot-password" className="text-blue-600 text-end -mt-4">
+            <Link
+              to="/forgot-password"
+              className="text-blue-600 text-end -mt-4"
+            >
               Forgot password?
             </Link>
             <Button
