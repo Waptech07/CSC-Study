@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Typography,
   TextField,
   Button,
   Card,
@@ -14,7 +13,6 @@ import {
   MdOutlinePhone,
 } from "react-icons/md";
 import contactImg from "../assets/contact.jpg";
-import Footer from "../components/Footer";
 
 const ContactUsPage = () => {
   const [formData, setFormData] = useState({
