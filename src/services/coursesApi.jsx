@@ -22,6 +22,17 @@ export const getCourseDetails = async (courseId) => {
     }
 };
 
+export const searchCourses = async (query) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/search/?q=${query}`);
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error searching courses:", error);
+    }
+  };
+  
+
 export const getInstructorDetails = async (instructorId) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/instructors/${instructorId}/`);
@@ -31,6 +42,16 @@ export const getInstructorDetails = async (instructorId) => {
         throw error;
     }
 };
+
+export const getInstructorDetailsByUserId = async (userId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/instructors/user/${userId}/`);
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching instructor details by user ID:", error);
+    }
+  };
 
 export const getCategories = async () => {
     try {
