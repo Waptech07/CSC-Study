@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Menu, MenuItem, IconButton, Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CloseIcon from "@mui/icons-material/Close";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -119,7 +119,11 @@ const NavBar = () => {
                   onClick={() => {
                     handleMobileMenuClose();
                     handleMenuClose();
-                    navigate("/profile/details");
+                    if (user.is_instructor) {
+                      navigate("/my-profile");
+                    } else {
+                      navigate("/profile")
+                    }
                   }}
                 >
                   Profile
@@ -235,7 +239,7 @@ const NavBar = () => {
                   >
                     Profile
                     <IconButton className="pr-40">
-                      <KeyboardArrowDownIcon/>
+                      <KeyboardArrowDownIcon />
                     </IconButton>
                   </NavLink>
                 </>
