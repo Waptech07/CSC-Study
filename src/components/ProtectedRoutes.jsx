@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import Loading from "./Loading";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading, isAuthenticated } = useContext(AuthContext);
@@ -8,10 +9,7 @@ const ProtectedRoute = ({ children }) => {
   if (loading) {
     // Show a loading indicator while user data is being fetched
     return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Loading...</p>
-      </div>
+      <Loading/>
     );
   }
 

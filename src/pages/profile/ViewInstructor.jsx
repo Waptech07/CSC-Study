@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, Outlet, useLocation, useParams } from "react-router-dom";
 import { getInstructorDetails } from "../../services/coursesApi";
+import Loading from "../../components/Loading";
 
 const ViewInstructor = () => {
   const { id } = useParams();
@@ -24,7 +25,7 @@ const ViewInstructor = () => {
   }, [id]);
 
   if (!instructor) {
-    return <div>Loading...</div>;
+    <Loading/>
   }
 
   return (

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getInstructorDetails } from "../../../services/coursesApi";
+import Loading from "../../Loading";
 
 const ViewInstructorDetails = () => {
   const { id } = useParams();
@@ -20,7 +21,7 @@ const ViewInstructorDetails = () => {
   }, [id]);
 
   if (!instructor) {
-    return <div>Loading...</div>;
+    <Loading/>
   }
 
   return (

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import { getCategories } from "../../services/coursesApi";
+import Loading from "../Loading";
 
 const TopCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -24,7 +25,7 @@ const TopCategories = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    <Loading />;
   }
 
   return (
