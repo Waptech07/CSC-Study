@@ -6,7 +6,7 @@ import heroImage from "../../assets/hero.png";
 const Hero = () => {
   return (
     <>
-      <section className="text-center mb-20 bg-gradient-to-r from-blue-100 to-blue-200 md:py-10 py-28 md:px-10 px-5">
+      <section className="text-center lg:mb-20 bg-gradient-to-r from-blue-100 to-blue-200 md:py-10 py-28 md:px-10 px-5">
         <div className="flex items-center justify-evenly flex-col-reverse md:flex-row">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
