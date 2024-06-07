@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   const logout = useCallback(() => {
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     if (token) {
+      setIsLoading(true); // Set loading to true when fetching user details
       ApiService.getUserDetails()
         .then((response) => {
           if (response.success) {
@@ -34,7 +36,12 @@ export const AuthProvider = ({ children }) => {
         .catch((err) => {
           setError("Failed to fetch user details");
           logout();
+        })
+        .finally(() => {
+          setIsLoading(false); // Set loading to false after fetching user details
         });
+    } else {
+      setIsLoading(false); // If no token, set loading to false immediately
     }
   }, [logout]);
 
@@ -45,8 +52,8 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("access_token", response.data.token.access);
         localStorage.setItem("refresh_token", response.data.token.refresh);
         setIsAuthenticated(true);
-        setUser(response.data.user);
-        setError(null); // Clear any previous error
+        setUser(response.data.user); // Ensure user object has isInstructor
+        setError(null);
         return response;
       } else {
         setError(response.error);
@@ -58,31 +65,36 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = (name, email, password, confirmPassword, isInstructor) => {
-    return ApiService.register(
-      name,
-      email,
-      password,
-      confirmPassword,
-      isInstructor
-    )
-      .then((response) => {
-        if (response.success) {
-          localStorage.setItem("access_token", response.data.token.access);
-          localStorage.setItem("refresh_token", response.data.token.refresh);
-          setIsAuthenticated(true);
-          setUser(response.data.user);
-          setError(null); // Clear any previous error
-          return response
-        } else {
-          setError(response.error);
-          return response;
-        }
-      })
-      .catch((err) => {
-        setError("Registration failed");
-        throw err;
-      });
+  const register = async (
+    name,
+    email,
+    password,
+    confirmPassword,
+    isInstructor
+  ) => {
+    try {
+      const response = await ApiService.register(
+        name,
+        email,
+        password,
+        confirmPassword,
+        isInstructor
+      );
+      if (response.success) {
+        localStorage.setItem("access_token", response.data.token.access);
+        localStorage.setItem("refresh_token", response.data.token.refresh);
+        setIsAuthenticated(true);
+        setUser(response.data.user); // Ensure user object has isInstructor
+        setError(null);
+        return response;
+      } else {
+        setError(response.error);
+        return response;
+      }
+    } catch (err) {
+      setError("Registration failed");
+      throw err;
+    }
   };
 
   const forgotPassword = async (email) => {
@@ -98,7 +110,12 @@ export const AuthProvider = ({ children }) => {
   const resetPassword = async (uid, token, newPassword) => {
     try {
       const response = await ApiService.resetPassword(uid, token, newPassword);
-      return response;
+      if (response.success) {
+        return response;
+      } else {
+        setError(response.error);
+        return response;
+      }
     } catch (err) {
       setError("Failed to reset password");
       throw err;
@@ -117,6 +134,7 @@ export const AuthProvider = ({ children }) => {
         resetPassword,
         logout,
         error,
+        isLoading,
       }}
     >
       {children}
