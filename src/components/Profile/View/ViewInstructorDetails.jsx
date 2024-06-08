@@ -29,19 +29,19 @@ const ViewInstructorDetails = () => {
       <div className="flex flex-col gap-4">
         <div>
           <label className="block font-bold text-gray-700">Email:</label>
-          <p className="text-gray-600">{instructor.user.email}</p>
+          <p className="text-gray-600">{instructor?.user.email}</p>
         </div>
         <div>
           <label className="block font-bold text-gray-700">Phone:</label>
-          <p className="text-gray-600">{instructor.user.phone}</p>
+          <p className="text-gray-600">{instructor?.user.phone}</p>
         </div>
         <div>
           <label className="block font-bold text-gray-700">Address:</label>
-          <p className="text-gray-600">{instructor.user.address}</p>
+          <p className="text-gray-600">{instructor?.user.address}</p>
         </div>
         <div>
           <label className="block font-bold text-gray-700">Nationality:</label>
-          <p className="text-gray-600">{instructor.user.nationality}</p>
+          <p className="text-gray-600">{instructor?.user.nationality}</p>
         </div>
       </div>
     </div>
