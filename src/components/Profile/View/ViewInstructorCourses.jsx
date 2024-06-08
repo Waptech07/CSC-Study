@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getInstructorDetails } from "../../../services/coursesApi";
 
 const ViewInstructorCourses = () => {
@@ -13,7 +13,7 @@ const ViewInstructorCourses = () => {
     const date = new Date(dateString);
     const now = new Date();
     const secondsAgo = Math.floor((now - date) / 1000);
-  
+
     if (secondsAgo < 60) {
       return "Just now";
     } else if (secondsAgo < 3600) {
@@ -56,31 +56,33 @@ const ViewInstructorCourses = () => {
     <div className="w-11/12 pl-10">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
         {currentCourses.map((course, index) => (
-          <div
-            key={index}
-            className="bg-white hover:shadow-md rounded-lg transition-transform transform"
-          >
-            <img
-              src={
-                course.image
-                  ? `http://127.0.0.1:8000${course.image}`
-                  : "https://via.placeholder.com/150"
-              }
-              className="w-full h-60 rounded-t-lg mb-3"
-              alt={course.title}
-            />
-            <div className="px-2 py-4">
-              <h3 className="text-gray-800 font-bold text-xl mb-3">
-                {course.title}
-              </h3>
-              <p className="text-gray-500 font-medium text-base mb-2">
-              {timeAgo(course.created_at)}
-              </p>
-              <p className="text-gray-800 font-semibold text-lg">
-                &#8358;{course.price.toLocaleString()}
-              </p>
+          <Link to={`/courses/${course.id}`}>
+            <div
+              key={index}
+              className="bg-white hover:shadow-md rounded-lg transition-transform transform"
+            >
+              <img
+                src={
+                  course.image
+                    ? `http://127.0.0.1:8000${course.image}`
+                    : "https://via.placeholder.com/150"
+                }
+                className="w-full h-60 rounded-t-lg mb-3"
+                alt={course.title}
+              />
+              <div className="px-2 py-4">
+                <h3 className="text-gray-800 font-bold text-xl mb-3">
+                  {course.title}
+                </h3>
+                <p className="text-gray-500 font-medium text-base mb-2">
+                  {timeAgo(course.created_at)}
+                </p>
+                <p className="text-gray-800 font-semibold text-lg">
+                  &#8358;{course.price.toLocaleString()}
+                </p>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
       <div className="flex justify-center mt-6">
