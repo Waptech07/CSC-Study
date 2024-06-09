@@ -22,6 +22,60 @@ export const getCourseDetails = async (courseId) => {
   }
 };
 
+export const initiatePayment = async (courseId) => {
+  const token = localStorage.getItem("access_token");
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/course/${courseId}/initiate-payment/`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error initiating payment:", error);
+    throw error;
+  }
+};
+
+export const verifyPayment = async (reference) => {
+  const token = localStorage.getItem("access_token");
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/verify-payment/${reference}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error verifying payment:", error);
+    throw error;
+  }
+};
+
+export const checkEnrollment = async (courseId) => {
+  const token = localStorage.getItem("access_token");
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/${courseId}/check-enrollment/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const searchCourses = async (query) => {
   try {
     const response = await fetch(`${API_BASE_URL}/search/?q=${query}`);
