@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink, Outlet, useLocation, useParams } from "react-router-dom";
 import { getInstructorDetails } from "../../services/coursesApi";
 import Loading from "../../components/Loading";
+import { FaBookOpen, FaStar, FaUsers } from "react-icons/fa";
 
 const ViewInstructor = () => {
   const { id } = useParams();
@@ -25,7 +26,7 @@ const ViewInstructor = () => {
   }, [id]);
 
   if (!instructor) {
-    <Loading/>
+    <Loading />;
   }
 
   return (
@@ -58,6 +59,34 @@ const ViewInstructor = () => {
               </p>
             </div>
             <hr className="w-10/12 h-px bg-gray-400 border-0 px-10 my-5" />
+            <div className="flex justify-between items-center gap-8">
+              <div className="flex flex-col items-center">
+                <div className="rounded-full text-4xl p-5 bg-orange-200 text-orange-800">
+                  <FaStar />
+                </div>
+                <p className="text-xl text-gray-700 font-semibold">5.0</p>
+                <p className="text-sm text-gray-400 font-medium">Ratings</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="rounded-full text-4xl p-5 bg-green-200 text-green-800">
+                  <FaUsers />
+                </div>
+                <p className="text-xl text-gray-700 font-semibold">200</p>
+                <p className="text-sm text-gray-400 font-medium">
+                  Students Learning
+                </p>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="rounded-full text-4xl p-5 bg-blue-200 text-blue-800">
+                  <FaBookOpen />
+                </div>
+                <p className="text-xl text-gray-700 font-semibold">
+                  {instructor?.courses?.length}
+                </p>
+                <p className="text-sm text-gray-400 font-medium">Courses</p>
+              </div>
+            </div>
+            <hr className="w-10/12 h-px bg-gray-400 border-0 px-10 my-5" />
             <div className="px-10">
               <h2 className="text-gray-800 font-bold text-lg mb-3">
                 Biography
@@ -71,7 +100,10 @@ const ViewInstructor = () => {
             <div className="flex gap-5 pb-2 pl-5">
               {[
                 { to: `/instructor/${instructor?.id}`, label: "Courses" },
-                { to: `/instructor/${instructor?.id}/details`, label: "Details" },
+                {
+                  to: `/instructor/${instructor?.id}/details`,
+                  label: "Details",
+                },
               ].map((link) => (
                 <NavLink
                   key={link.to}
