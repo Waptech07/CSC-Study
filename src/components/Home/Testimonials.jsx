@@ -38,17 +38,17 @@ const Testimonials = () => {
           {[
             {
               text: "Great platform! I learned so much. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta itaque sunt culpa adipisci velit quas quis labore, ad ut eveniet!",
-              name: "Agba Dev",
+              name: "Victory",
               role: "Web Developer",
             },
             {
               text: "Excellent courses and instructors. Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque asperiores, eaque dolor maiores molestias perspiciatis.",
-              name: "Agba Dev",
+              name: "Victory",
               role: "Web Developer",
             },
             {
               text: "Highly recommend to everyone. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quam autem amet mollitia ratione quisquam dolorum.",
-              name: "Agba Dev",
+              name: "Victory",
               role: "Web Developer",
             },
           ].map((testimonial, index) => (
