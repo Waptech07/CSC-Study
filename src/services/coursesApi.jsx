@@ -97,9 +97,16 @@ export const getCourseLessons = async (courseId) => {
 };
 
 export const getLessonDetails = async (courseId, lessonId) => {
+  const token = localStorage.getItem("access_token");
+
   try {
     const response = await axios.get(
-      `${API_BASE_URL}/${courseId}/lessons/${lessonId}/`
+      `${API_BASE_URL}/${courseId}/lessons/${lessonId}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     return response.data;
   } catch (error) {
