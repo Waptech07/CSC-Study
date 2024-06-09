@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useOutletContext } from "react-router-dom";
-import { getCourseLessons } from "../../services/coursesApi";
+import { getCourseLessons, checkEnrollment } from "../../services/coursesApi";
+import { FaLock } from "react-icons/fa";
 
 const CourseLessons = () => {
   const course = useOutletContext();
   const [lessons, setLessons] = useState([]);
+  const [enrollmentStatus, setEnrollmentStatus] = useState(false);
 
   useEffect(() => {
     const fetchLessons = async () => {
@@ -16,7 +18,17 @@ const CourseLessons = () => {
       }
     };
 
+    const fetchEnrollmentStatus = async () => {
+      try {
+        const enrollmentData = await checkEnrollment(course.id);
+        setEnrollmentStatus(enrollmentData.is_enrolled);
+      } catch (error) {
+        // console.error("Error fetching enrollment status:", error);
+      }
+    };
+
     fetchLessons();
+    fetchEnrollmentStatus();
   }, [course.id]);
 
   return (
@@ -25,15 +37,32 @@ const CourseLessons = () => {
       {lessons?.length > 0 ? (
         <ul className="flex flex-col space-y-6">
           {lessons.map((lesson) => (
-            <Link to={`/courses/${course.id}/lessons/${lesson.id}`}>
+            <Link
+              to={
+                enrollmentStatus
+                  ? `/courses/${course.id}/lessons/${lesson.id}`
+                  : "#"
+              }
+              key={lesson.id}
+            >
               <li
-                key={lesson.id}
-                className="border rounded-lg p-4 hover:shadow-md transition-shadow duration-200"
+                className={`border rounded-lg p-4 hover:shadow-md transition-shadow duration-200 ${
+                  !enrollmentStatus && "flex justify-between items-center gap-5"
+                }`}
               >
+                <div>
+
                 <h3 className="text-2xl font-semibold text-gray-800 mb-2">
                   {lesson.title}
                 </h3>
                 <p className="text-gray-600">{lesson.content}</p>
+                </div>
+                
+                {!enrollmentStatus && (
+                  <div className=" text-red-500">
+                    <FaLock size={24} />
+                  </div>
+                )}
               </li>
             </Link>
           ))}
