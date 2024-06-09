@@ -38,6 +38,7 @@ import CourseOverview from './components/Courses/CourseOverview';
 import CourseLessons from './components/Courses/CourseLessons';
 import LessonDetails from './pages/courses/LessonDetails';
 import InstructorSettings from './components/Profile/Instructor/InstructorSettings';
+import PaymentSuccess from './components/PaymentSuccess';
 
 const App = () => {
 
@@ -77,7 +78,8 @@ const App = () => {
             </Route>
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/category/:categoryId" element={<CategoryCoursesPage />} />
-            <Route path="/courses/:courseId/lessons/:lessonId" element={<LessonDetails/>} />
+            <Route path="/courses/:courseId/lessons/:lessonId" element={<ProtectedRoute><LessonDetails/></ProtectedRoute>} />
+            <Route path="/course/:courseId/payment-success" element={<PaymentSuccess />} />
 
             <Route path="/instructor/:id" element={<ViewInstructor />} >
               <Route path="" element={<ViewInstructorCourses />} />
