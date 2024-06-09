@@ -64,7 +64,7 @@ const Settings = () => {
           handleErrors(response.error);
         }
       } catch (error) {
-        toast.error("hello");
+        toast.error("Network Error");
       }
     }
   };
