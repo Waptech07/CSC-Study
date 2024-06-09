@@ -70,7 +70,7 @@ const TopCategories = () => {
                     <div className="flex flex-col justify-center items-center">
                       <img
                         src={
-                          `http://127.0.0.1:8000${image}` ||
+                          `https://csc-study-api.vercel.app${image}` ||
                           "https://via.placeholder.com/150"
                         }
                         alt={name}

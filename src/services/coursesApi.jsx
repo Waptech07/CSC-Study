@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://127.0.0.1:8000/api/courses";
+const API_BASE_URL = "https://csc-study-api.vercel.app/api/courses";
 
 export const getCourses = async () => {
   try {

@@ -76,7 +76,7 @@ const ProfileUpdate = () => {
           src={
             profilePicture
               ? URL.createObjectURL(profilePicture)
-              : `http://127.0.0.1:8000${user?.profile_picture}`
+              : `https://csc-study-api.vercel.app${user?.profile_picture}`
           }
           alt="User"
           className="w-60 rounded-full border cursor-pointer"

@@ -60,7 +60,7 @@ const OurBestInstructors = () => {
               <div className="bg-white border my-10 hover:shadow-md">
                 <img
                   src={
-                    `http://127.0.0.1:8000${instructor.user.profile_picture}` ||
+                    `https://csc-study-api.vercel.app${instructor.user.profile_picture}` ||
                     "https://via.placeholder.com/150"
                     }
                     alt="Instructor"

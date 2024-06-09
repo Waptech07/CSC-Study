@@ -92,7 +92,7 @@ const CourseDetails = () => {
             <div className="flex items-center">
               <img
                 src={
-                  `http://127.0.0.1:8000${course.instructor.user.profile_picture}` ||
+                  `https://csc-study-api.vercel.app${course.instructor.user.profile_picture}` ||
                   "https://via.placeholder.com/150"
                 }
                 alt={course.instructor.user.name}
@@ -111,7 +111,7 @@ const CourseDetails = () => {
           <h1 className="text-4xl font-bold mb-4">{course.title}</h1>
           <img
             src={
-              `http://127.0.0.1:8000${course.image}` ||
+              `https://csc-study-api.vercel.app${course.image}` ||
               "https://via.placeholder.com/150"
             }
             alt={course.title}
@@ -141,7 +141,7 @@ const CourseDetails = () => {
           <div className="bg-white p-4 rounded-md shadow-md mb-8">
             <img
               src={
-                `http://127.0.0.1:8000${course.image}` ||
+                `https://csc-study-api.vercel.app${course.image}` ||
                 "https://via.placeholder.com/150"
               }
               alt={course.title}

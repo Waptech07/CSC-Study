@@ -30,7 +30,7 @@ const ProfilePage = () => {
                 src={
                   profilePicture
                     ? URL.createObjectURL(profilePicture)
-                    : `http://127.0.0.1:8000${user?.profile_picture}`
+                    : `https://csc-study-api.vercel.app${user?.profile_picture}`
                 }
                 alt="User"
                 className="w-12 h-12 md:w-14 md:h-14 rounded-full border cursor-pointer"

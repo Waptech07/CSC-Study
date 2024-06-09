@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://127.0.0.1:8000/api/auth/";
+const baseUrl = "https://csc-study-api.vercel.app/api/auth/";
 
 const ApiService = {
   async login(email, password) {
