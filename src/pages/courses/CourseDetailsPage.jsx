@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   useParams,
   Link,
   NavLink,
   Outlet,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
-import { getCourseDetails } from "../../services/coursesApi";
 import {
-  FaFacebook,
-  FaTwitter,
-  FaLinkedin,
-  FaShareAlt,
-  FaClock,
-  FaCalendarAlt,
-  FaMoneyBillWave,
-} from "react-icons/fa";
+  getCourseDetails,
+  initiatePayment,
+  checkEnrollment,
+} from "../../services/coursesApi";
+import { FaFacebook, FaTwitter, FaLinkedin, FaShareAlt } from "react-icons/fa";
 import Loading from "../../components/Loading";
+import { AuthContext } from "../../context/AuthContext";
 
 const CourseDetails = () => {
+  const { isAuthenticated } = useContext(AuthContext);
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isEnrolled, setIsEnrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path) => location.pathname === path;
 
@@ -38,8 +39,36 @@ const CourseDetails = () => {
       }
     };
 
+    const fetchEnrollmentStatus = async () => {
+      try {
+        const enrollmentStatus = await checkEnrollment(courseId);
+        setIsEnrolled(enrollmentStatus.is_enrolled);
+      } catch (error) {
+        // console.error("Error checking enrollment status:", error);
+      }
+    };
+
     fetchCourseDetails();
+    fetchEnrollmentStatus();
   }, [courseId]);
+
+  const handleBuyNow = async () => {
+    if (!isAuthenticated) {
+      // If not authenticated, display a message and provide options to log in or register
+      alert("Please log in or register to proceed with the purchase.");
+      // You can navigate to the login or registration page using useNavigate()
+      navigate("/login"); // Example: Navigate to the login page
+      return; // Exit the function to prevent further execution
+    }
+
+    // If authenticated, proceed with the purchase process
+    try {
+      const paymentData = await initiatePayment(courseId);
+      window.location.href = paymentData.data.authorization_url;
+    } catch (error) {
+      console.error("Error initiating payment:", error);
+    }
+  };
 
   if (loading) {
     return <Loading />;
@@ -121,9 +150,29 @@ const CourseDetails = () => {
             <p className="text-2xl font-semibold">
               &#8358;{course.price.toLocaleString()}
             </p>
-            <button className="w-full py-2 bg-blue-500 text-white font-semibold rounded-md mb-4">
-              Buy Now
-            </button>
+            {!isEnrolled && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleBuyNow();
+                }}
+                className="w-full py-2 bg-blue-500 text-white font-semibold rounded-md mb-4"
+              >
+                Buy Now
+              </button>
+            )}
+            {isEnrolled && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleBuyNow();
+                }}
+                className="w-full py-2 text-white font-semibold rounded-md mb-4 disabled:bg-gray-700"
+                disabled
+              >
+                Enrolled
+              </button>
+            )}
             <div>
               <h3 className="text-lg font-semibold mb-2">
                 This Course Includes:
