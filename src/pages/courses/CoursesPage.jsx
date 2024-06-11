@@ -131,7 +131,7 @@ const CoursesPage = () => {
               <Link to={`/courses/${course.id}`}>
                 <img
                   src={
-                    `https://csc-study-api.vercel.app${course.image}` ||
+                    `${course.image}` ||
                     "https://via.placeholder.com/150"
                   }
                   alt={course.title}
@@ -149,7 +149,7 @@ const CoursesPage = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <img
-                        src={`https://csc-study-api.vercel.app${course.instructor?.user?.profile_picture}`}
+                        src={`${course.instructor?.user?.profile_picture}`}
                         alt={course.instructor.user.name}
                         className="w-10 h-10 rounded-full mr-2"
                       />

@@ -64,7 +64,7 @@ const ViewInstructorCourses = () => {
               <img
                 src={
                   course.image
-                    ? `https://csc-study-api.vercel.app${course.image}`
+                    ? `${course.image}`
                     : "https://via.placeholder.com/150"
                 }
                 className="w-full h-60 rounded-t-lg mb-3"

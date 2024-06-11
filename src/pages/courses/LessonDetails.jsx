@@ -47,21 +47,21 @@ const LessonDetails = () => {
   if (lesson.documents) {
     resources.push({
       type: "Documents",
-      url: `https://csc-study-api.vercel.app${lesson.documents}`,
+      url: `${lesson.documents}`,
     });
   }
 
   if (lesson.images) {
     resources.push({
       type: "Images",
-      url: `https://csc-study-api.vercel.app${lesson.images}`,
+      url: `${lesson.images}`,
     });
   }
 
   if (lesson.files) {
     resources.push({
       type: "Downloadable Files",
-      url: `https://csc-study-api.vercel.app${lesson.files}`,
+      url: `${lesson.files}`,
     });
   }
 
@@ -76,7 +76,7 @@ const LessonDetails = () => {
               </h2>
               <Player
                 poster={lesson.images}
-                src={`https://csc-study-api.vercel.app${lesson.video}`}
+                src={`${lesson.video}`}
                 fluid={true}
                 width={720}
                 height={405}

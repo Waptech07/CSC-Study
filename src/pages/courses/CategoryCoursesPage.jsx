@@ -64,7 +64,7 @@ const CategoryCoursesPage = () => {
                   <Link to={`/courses/${id}`}>
                     {image && (
                       <img
-                        src={`https://csc-study-api.vercel.app/${image}`}
+                        src={`${image}`}
                         alt={title}
                         className="w-full h-48 object-cover rounded-t-lg mb-4"
                       />
@@ -80,7 +80,7 @@ const CategoryCoursesPage = () => {
                       className="flex items-center gap-4"
                     >
                       <img
-                        src={`https://csc-study-api.vercel.app${instructor?.user?.profile_picture}`}
+                        src={`${instructor?.user?.profile_picture}`}
                         alt={instructor?.user?.name}
                         className="w-12 h-12 object-cover border border-gray-300 rounded-full"
                       />

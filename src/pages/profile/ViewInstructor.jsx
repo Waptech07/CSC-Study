@@ -37,7 +37,7 @@ const ViewInstructor = () => {
             <img
               src={
                 instructor?.user.profile_picture
-                  ? `https://csc-study-api.vercel.app${instructor?.user.profile_picture}`
+                  ? `${instructor?.user.profile_picture}`
                   : "https://via.placeholder.com/150"
               }
               className="rounded-full w-60 h-60"

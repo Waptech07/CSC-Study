@@ -243,7 +243,7 @@ const Settings = () => {
             src={
               profilePicture
                 ? URL.createObjectURL(profilePicture)
-                : `https://csc-study-api.vercel.app${user?.profile_picture}`
+                : `${user?.profile_picture}`
             }
             alt="User"
             className="w-60 rounded-full border cursor-pointer"

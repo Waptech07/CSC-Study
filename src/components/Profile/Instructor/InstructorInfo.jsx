@@ -44,7 +44,7 @@ const InstructorInfo = () => {
         src={
           profilePicture
             ? URL.createObjectURL(profilePicture)
-            : `https://csc-study-api.vercel.app${user?.profile_picture}`
+            : `${user?.profile_picture}`
         }
         className="rounded-full w-60 h-60"
         alt="profile-image"

@@ -104,7 +104,7 @@ const NavBar = () => {
           {isAuthenticated ? (
             <div className="flex items-center">
               <img
-                src={`https://csc-study-api.vercel.app${user?.profile_picture}`}
+                src={`${user?.profile_picture}`}
                 alt="User"
                 className="w-10 h-10 rounded-full cursor-pointer"
                 onClick={handleProfileMenuOpen}
