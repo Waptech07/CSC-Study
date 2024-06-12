@@ -33,12 +33,12 @@ const OurBestInstructors = () => {
         <h2 className="text-4xl md:text-5xl font-bold mb-4 text-center">
           Meet Our Best Instructors
         </h2>
-        <div className="md:px-0 px-40">
+        <div className="md:px-0 px-10">
 
         <Swiper
           modules={[Pagination]}
           spaceBetween={20}
-          slidesPerView={1}
+          slidesPerView={2}
           breakpoints={{
             768: {
               slidesPerView: 2,
@@ -67,7 +67,7 @@ const OurBestInstructors = () => {
                     className="w-full h-60"
                     />
                 <div className="p-4 h-24">
-                  <h3 className="text-lg md:text-xl font-bold mb-2">
+                  <h3 className="text-lg md:text-xl font-bold mb-2 capitalize">
                     {instructor.user.name}
                   </h3>
                   <p>{instructor.user.profession}</p>
