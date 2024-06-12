@@ -34,48 +34,47 @@ const OurBestInstructors = () => {
           Meet Our Best Instructors
         </h2>
         <div className="md:px-0 px-10">
-
-        <Swiper
-          modules={[Pagination]}
-          spaceBetween={20}
-          slidesPerView={2}
-          breakpoints={{
-            768: {
-              slidesPerView: 2,
-              spaceBetween: 20,
+          <Swiper
+            modules={[Pagination]}
+            spaceBetween={20}
+            slidesPerView={1}
+            breakpoints={{
+              768: {
+                slidesPerView: 2,
+                spaceBetween: 20,
               },
               1024: {
                 slidesPerView: 3,
                 spaceBetween: 30,
-                },
-                1280: {
-                  slidesPerView: 4,
-                  spaceBetween: 40,
-                  },
-                  }}
-                  pagination={{ clickable: true }}
-                  >
-          {instructors.map((instructor, index) => (
-            <SwiperSlide key={index}>
-              <div className="bg-white border my-10 hover:shadow-md">
-                <img
-                  src={
-                    `${instructor.user.profile_picture}` ||
-                    "https://via.placeholder.com/150"
+              },
+              1280: {
+                slidesPerView: 4,
+                spaceBetween: 40,
+              },
+            }}
+            pagination={{ clickable: true }}
+          >
+            {instructors.map((instructor, index) => (
+              <SwiperSlide key={index}>
+                <div className="bg-white border my-10 hover:shadow-md">
+                  <img
+                    src={
+                      `${instructor.user.profile_picture}` ||
+                      "https://via.placeholder.com/150"
                     }
                     alt="Instructor"
                     className="w-full h-60"
-                    />
-                <div className="p-4 h-24">
-                  <h3 className="text-lg md:text-xl font-bold mb-2 capitalize">
-                    {instructor.user.name}
-                  </h3>
-                  <p>{instructor.user.profession}</p>
+                  />
+                  <div className="p-4 h-24">
+                    <h3 className="text-lg md:text-xl font-bold mb-2 capitalize">
+                      {instructor.user.name}
+                    </h3>
+                    <p>{instructor.user.profession}</p>
+                  </div>
                 </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       </section>
     </>
