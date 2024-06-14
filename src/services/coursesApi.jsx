@@ -184,6 +184,25 @@ export const addCourse = async (courseData) => {
   }
 };
 
+export const updateCourse = async (courseId, courseData) => {
+  const token = localStorage.getItem("access_token");
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/${courseId}/update/`,
+      courseData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating course:", error.response.data);
+    throw error;
+  }
+};
+
 export const deleteCourse = async (courseId) => {
   const token = localStorage.getItem("access_token");
 
@@ -215,6 +234,26 @@ export const addLesson = async (courseId, lessonData) => {
   }
 };
 
+export const updateLesson = async (courseId, lessonId, lessonData) => {
+  const token = localStorage.getItem("access_token");
+
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/${courseId}/lessons/${lessonId}/update/`,
+      lessonData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating lesson:", error.response.data);
+    throw error;
+  }
+};
+
 export const deleteLesson = async (courseId, lessonId) => {
   const token = localStorage.getItem("access_token");
   const response = await axios.delete(
@@ -226,4 +265,66 @@ export const deleteLesson = async (courseId, lessonId) => {
     }
   );
   return response.data;
+};
+
+const getToken = () => localStorage.getItem("access_token");
+
+export const getUserEnrollments = async () => {
+  const token = getToken();
+  try {
+    const response = await axios.get(`${API_BASE_URL}/enrollments/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error getting user enrollments:", error);
+    throw error;
+  }
+};
+
+export const getActiveCourses = async () => {
+  const token = getToken();
+  try {
+    const response = await axios.get(`${API_BASE_URL}/active-courses/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error getting active courses:", error);
+    throw error;
+  }
+};
+
+export const getCompletedCourses = async () => {
+  const token = getToken();
+  try {
+    const response = await axios.get(`${API_BASE_URL}/completed-courses/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error getting completed courses:", error);
+    throw error;
+  }
+};
+
+export const getPurchaseHistory = async () => {
+  const token = getToken();
+  try {
+    const response = await axios.get(`${API_BASE_URL}/purchase-history/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error getting purchase history:", error);
+    throw error;
+  }
 };
