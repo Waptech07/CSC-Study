@@ -3,12 +3,43 @@ import { AuthContext } from "../../context/AuthContext";
 import { PiBookOpenTextThin } from "react-icons/pi";
 import { RiShieldCheckLine } from "react-icons/ri";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import {
+  getUserEnrollments,
+  getCompletedCourses,
+} from "../../services/coursesApi";
 
 const ProfilePage = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [profilePicture, setProfilePicture] = useState(null);
+  const [enrolledCoursesCount, setEnrolledCoursesCount] = useState(0);
+  const [completedCoursesCount, setCompletedCoursesCount] = useState(0);
   const location = useLocation();
+
+  useEffect(() => {
+    // Fetch user enrollments
+    const fetchEnrollments = async () => {
+      try {
+        const enrollmentsData = await getUserEnrollments();
+        setEnrolledCoursesCount(enrollmentsData.length);
+      } catch (error) {
+        console.error("Error fetching user enrollments:", error);
+      }
+    };
+
+    // Fetch user completed courses
+    const fetchCompletedCourses = async () => {
+      try {
+        const completedCoursesData = await getCompletedCourses();
+        setCompletedCoursesCount(completedCoursesData.length);
+      } catch (error) {
+        console.error("Error fetching completed courses:", error);
+      }
+    };
+
+    fetchEnrollments();
+    fetchCompletedCourses();
+  }, []);
 
   useEffect(() => {
     if (user.is_instructor) {
@@ -48,7 +79,7 @@ const ProfilePage = () => {
               </div>
               <div>
                 <p className="capitalize font-bold text-lg lg:text-2xl text-gray-700">
-                  24
+                {enrolledCoursesCount}
                 </p>
                 <p className="text-gray-400 font-medium text-sm lg:text-base">
                   Enrolled Courses
@@ -61,7 +92,7 @@ const ProfilePage = () => {
               </div>
               <div>
                 <p className="capitalize font-bold text-lg lg:text-2xl text-gray-700">
-                  19
+                {completedCoursesCount}
                 </p>
                 <p className="text-gray-400 font-medium text-sm lg:text-base">
                   Completed Courses
