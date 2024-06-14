@@ -76,20 +76,28 @@ const NavBar = () => {
             Home
           </NavLink>
           <NavLink
-            to="/courses"
-            className={`text-gray-800 font-bold text-xl uppercase ${
-              isActive("/courses") && "border-b-[3px] border-blue-500"
-            }`}
-          >
-            Courses
-          </NavLink>
-          <NavLink
             to="/about"
             className={`text-gray-800 font-bold text-xl uppercase ${
               isActive("/about") && "border-b-[3px] border-blue-500"
             }`}
           >
             About
+          </NavLink>
+          <NavLink
+            to="/blog"
+            className={`text-gray-800 font-bold text-xl uppercase ${
+              isActive("/blog") && "border-b-[3px] border-blue-500"
+            }`}
+          >
+            Blog
+          </NavLink>
+          <NavLink
+            to="/courses"
+            className={`text-gray-800 font-bold text-xl uppercase ${
+              isActive("/courses") && "border-b-[3px] border-blue-500"
+            }`}
+          >
+            Courses
           </NavLink>
           <NavLink
             to="/contact"
@@ -199,16 +207,6 @@ const NavBar = () => {
                 Home
               </NavLink>
               <NavLink
-                to="/courses"
-                onClick={handleMobileMenuToggle}
-                className={`block py-2 text-gray-800 font-semibold text-xl capitalize pl-5 w-full hover:bg-blue-500 hover:text-white transition duration-300 ${
-                  isActive("/courses") &&
-                  "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
-              >
-                Courses
-              </NavLink>
-              <NavLink
                 onClick={handleMobileMenuToggle}
                 to="/about"
                 className={`block py-2 text-gray-800 font-semibold text-xl capitalize pl-5 w-full hover:bg-blue-500 hover:text-white transition duration-300 ${
@@ -217,6 +215,26 @@ const NavBar = () => {
                 }`}
               >
                 About
+              </NavLink>
+              <NavLink
+                onClick={handleMobileMenuToggle}
+                to="/blog"
+                className={`block py-2 text-gray-800 font-semibold text-xl capitalize pl-5 w-full hover:bg-blue-500 hover:text-white transition duration-300 ${
+                  isActive("/blog") &&
+                  "bg-blue-500 text-white hover:bg-blue-600"
+                }`}
+              >
+                Blog
+              </NavLink>
+              <NavLink
+                to="/courses"
+                onClick={handleMobileMenuToggle}
+                className={`block py-2 text-gray-800 font-semibold text-xl capitalize pl-5 w-full hover:bg-blue-500 hover:text-white transition duration-300 ${
+                  isActive("/courses") &&
+                  "bg-blue-500 text-white hover:bg-blue-600"
+                }`}
+              >
+                Courses
               </NavLink>
               <NavLink
                 onClick={handleMobileMenuToggle}
