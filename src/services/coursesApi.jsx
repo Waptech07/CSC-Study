@@ -328,3 +328,22 @@ export const getPurchaseHistory = async () => {
     throw error;
   }
 };
+
+export const completeLesson = async (courseId, lessonId) => {
+  const token = localStorage.getItem("access_token");
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/${courseId}/lessons/${lessonId}/complete/`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error completing lesson:", error);
+    throw error;
+  }
+};
