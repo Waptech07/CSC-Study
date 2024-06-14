@@ -41,7 +41,7 @@ const MyProfile = () => {
       <div className="flex flex-col lg:flex-row items-center justify-between gap-10 pt-5">
         <div className="bg-white rounded-md shadow-lg w-full lg:w-1/2 p-5 lg:p-10">
           <h2 className="text-2xl text-blue-600 font-bold mb-2">About Me</h2>
-          <p className="text-base text-gray-400">
+          <div className="text-base text-gray-400">
             {user?.bio || (
               <>
                 <div>
@@ -67,7 +67,7 @@ const MyProfile = () => {
                 </div>
               </>
             )}
-          </p>
+          </div>
         </div>
         <div className="bg-white rounded-md shadow-lg w-full lg:w-1/2 p-5 lg:p-10">
           <h2 className="text-2xl text-black font-bold mb-2">
