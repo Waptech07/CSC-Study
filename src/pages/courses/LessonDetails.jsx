@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getLessonDetails, getCourseDetails } from "../../services/coursesApi";
+import {
+  getLessonDetails,
+  getCourseDetails,
+  completeLesson,
+} from "../../services/coursesApi"; // Import CompleteLesson from coursesApi
 import Loading from "../../components/Loading";
 import { BigPlayButton, LoadingSpinner, Player } from "video-react";
 import "video-react/dist/video-react.css"; // import video-react styles
@@ -29,6 +33,18 @@ const LessonDetails = () => {
 
     fetchLessonAndCourseDetails();
   }, [courseId, lessonId]);
+
+  const handleCompleteLesson = async () => {
+    try {
+      const response = await completeLesson(courseId, lessonId);
+      // Call CompleteLesson with courseId and lessonId
+      console.log("Lesson completed successfully:", response);
+      // You might want to update the UI or state based on the response, e.g., set a completion status
+    } catch (error) {
+      console.error("Error completing lesson:", error);
+      // Handle errors, e.g., show an error message to the user
+    }
+  };
 
   if (loading) {
     return <Loading />;
@@ -109,6 +125,12 @@ const LessonDetails = () => {
                   </li>
                 ))}
               </ul>
+              <button
+                onClick={handleCompleteLesson}
+                className="px-2 py-4 rounded-md bg-green-700 hover:bg-green-600 text-white font-bold"
+              >
+                Complete Lesson
+              </button>
             </div>
           )}
         </div>
