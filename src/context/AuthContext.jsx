@@ -45,9 +45,9 @@ export const AuthProvider = ({ children }) => {
     }
   }, [logout]);
 
-  const login = async (email, password) => {
+  const login = async (username_or_email, password) => {
     try {
-      const response = await ApiService.login(email, password);
+      const response = await ApiService.login(username_or_email, password);
       if (response.success) {
         localStorage.setItem("access_token", response.data.token.access);
         localStorage.setItem("refresh_token", response.data.token.refresh);
@@ -67,18 +67,22 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (
     name,
+    username,
     email,
     password,
     confirmPassword,
-    isInstructor
+    isInstructor,
+    gender
   ) => {
     try {
       const response = await ApiService.register(
         name,
+        username,
         email,
         password,
         confirmPassword,
-        isInstructor
+        isInstructor,
+        gender
       );
       if (response.success) {
         localStorage.setItem("access_token", response.data.token.access);
@@ -135,6 +139,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         error,
         isLoading,
+        verifyEmail: ApiService.verifyEmail, // Provide verifyEmail method
       }}
     >
       {children}
