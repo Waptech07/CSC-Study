@@ -10,8 +10,9 @@ import illustration from "../../assets/login.png";
 const Login = () => {
   const { isAuthenticated, login } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username_or_email, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -20,8 +21,10 @@ const Login = () => {
   }, [isAuthenticated, navigate]);
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
-      const response = await login(email, password);
+      const response = await login(username_or_email, password);
+      setLoading(false);
       if (response.success) {
         toast.success("Login successful!");
         navigate("/");
@@ -29,6 +32,7 @@ const Login = () => {
         toast.error(response.error || "Invalid credentials");
       }
     } catch (err) {
+      setLoading(false);
       toast.error("Please Check Your Internet Connection");
     }
   };
@@ -60,11 +64,11 @@ const Login = () => {
             onSubmit={(e) => e.preventDefault()}
           >
             <TextField
-              label="Email"
+              label="Username or Email"
               variant="outlined"
               fullWidth
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username_or_email}
+              onChange={(e) => setUsernameOrEmail(e.target.value)}
             />
             <TextField
               label="Password"
@@ -85,8 +89,9 @@ const Login = () => {
               color="primary"
               fullWidth
               onClick={handleLogin}
+              disabled={loading}
             >
-              Login
+              {loading ? "Logging in..." : "Login"}
             </Button>
           </form>
           <div className="flex flex-col mt-4">
