@@ -1,5 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
-import { TextField, Button, Typography, Checkbox, FormControlLabel } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Checkbox,
+  FormControlLabel,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
 import { motion } from "framer-motion";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
@@ -10,11 +20,15 @@ import illustration from "../../assets/register.png";
 const Register = () => {
   const { isAuthenticated, register } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
-  const [isInstructor, setIsInstructor] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    username: "",
+    name: "",
+    password: "",
+    password2: "",
+    gender: "",
+    isInstructor: false,
+  });
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -23,23 +37,40 @@ const Register = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: checked }));
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    if (password !== password2) {
+    if (formData.password !== formData.password2) {
       setErrors({ password2: "Passwords do not match" });
       toast.warning("Passwords do not match", { autoClose: 2000 });
       return;
     }
 
     try {
-      const response = await register(name, email, password, password2, isInstructor);
+      const response = await register(
+        formData.name,
+        formData.username,
+        formData.email,
+        formData.password,
+        formData.password2,
+        formData.isInstructor,
+        formData.gender
+      );
 
       if (response.success) {
         toast.success("Registration successful!", { autoClose: 2000 });
         navigate("/");
       } else {
-        console.error("Registration errors:", response.error);
         setErrors(response.error);
         const errorMessages = Object.values(response.error).flat();
         errorMessages.forEach((message) =>
@@ -79,17 +110,29 @@ const Register = () => {
               label="Name"
               variant="outlined"
               fullWidth
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
               error={!!errors.name}
               helperText={errors.name ? errors.name.join(", ") : ""}
+            />
+            <TextField
+              label="Username"
+              variant="outlined"
+              fullWidth
+              name="username"
+              value={formData.username}
+              onChange={handleInputChange}
+              error={!!errors.username}
+              helperText={errors.username ? errors.username.join(", ") : ""}
             />
             <TextField
               label="Email"
               variant="outlined"
               fullWidth
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
               error={!!errors.email}
               helperText={errors.email ? errors.email.join(", ") : ""}
             />
@@ -98,8 +141,9 @@ const Register = () => {
               type="password"
               variant="outlined"
               fullWidth
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
               error={!!errors.password}
               helperText={errors.password ? errors.password.join(", ") : ""}
             />
@@ -108,22 +152,41 @@ const Register = () => {
               type="password"
               variant="outlined"
               fullWidth
-              value={password2}
-              onChange={(e) => setPassword2(e.target.value)}
+              name="password2"
+              value={formData.password2}
+              onChange={handleInputChange}
               error={!!errors.password2}
               helperText={errors.password2 ? errors.password2 : ""}
             />
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={isInstructor}
-                  onChange={(e) => setIsInstructor(e.target.checked)}
+                  checked={formData.isInstructor}
+                  onChange={handleCheckboxChange}
                   name="isInstructor"
                   color="primary"
                 />
               }
               label="Register as Instructor"
             />
+            <FormControl variant="outlined" fullWidth error={!!errors.gender}>
+              <InputLabel>Gender</InputLabel>
+              <Select
+                label="Gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
+              >
+                <MenuItem value="M">Male</MenuItem>
+                <MenuItem value="F">Female</MenuItem>
+                <MenuItem value="O">Other</MenuItem>
+              </Select>
+              {errors.gender && (
+                <Typography variant="body2" color="error">
+                  {errors.gender.join(", ")}
+                </Typography>
+              )}
+            </FormControl>
             <Button variant="contained" color="primary" fullWidth type="submit">
               Register
             </Button>
