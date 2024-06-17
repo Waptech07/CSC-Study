@@ -3,14 +3,14 @@ import axios from "axios";
 const baseUrl = "https://csc-study-api.vercel.app/api/auth/";
 
 const ApiService = {
-  async login(email, password) {
+  async login(username_or_email, password) {
     const apiUrl = `${baseUrl}login/`;
     const headers = { "Content-Type": "application/json" };
 
     try {
       const response = await axios.post(
         apiUrl,
-        { email, password },
+        { username_or_email, password },
         { headers, timeout: 10000 }
       );
       return response.status >= 200 && response.status < 300
@@ -25,15 +25,25 @@ const ApiService = {
     }
   },
 
-  async register(name, email, password, confirmPassword, isInstructor) {
+  async register(
+    name,
+    username,
+    email,
+    password,
+    confirmPassword,
+    isInstructor,
+    gender
+  ) {
     const apiUrl = `${baseUrl}register/`;
     const headers = { "Content-Type": "application/json" };
     const body = {
       name,
+      username,
       email,
       password,
       password2: confirmPassword,
       is_instructor: isInstructor,
+      gender,
     };
 
     try {
@@ -41,6 +51,21 @@ const ApiService = {
         headers,
         timeout: 10000,
       });
+      return response.status >= 200 && response.status < 300
+        ? { success: true, data: response.data }
+        : { success: false, error: response.data };
+    } catch (error) {
+      console.error("Network error:", error);
+      return { success: false, error: error.response?.data || "Network error" };
+    }
+  },
+
+  async verifyEmail(uid, token) {
+    const apiUrl = `${baseUrl}verify-email/${uid}/${token}/`;
+    const headers = { "Content-Type": "application/json" };
+
+    try {
+      const response = await axios.get(apiUrl, {}, { headers, timeout: 10000 });
       return response.status >= 200 && response.status < 300
         ? { success: true, data: response.data }
         : { success: false, error: response.data };
