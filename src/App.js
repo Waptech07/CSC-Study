@@ -40,6 +40,10 @@ import LessonDetails from './pages/courses/LessonDetails';
 import InstructorSettings from './components/Profile/Instructor/InstructorSettings';
 import PaymentSuccess from './components/PaymentSuccess';
 import Chatbot from './components/ChatBot';
+import BlogLayout from './blog/BlogLayout';
+import BlogList from './blog/BlogList';
+import BlogDetail from './blog/BlogDetails';
+import VerifyEmail from './pages/auth/VerifyEmail';
 
 const App = () => {
 
@@ -57,6 +61,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/verify-email/:uid/:token" element={<VerifyEmail />} />
             <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
 
             <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}>
@@ -86,6 +91,12 @@ const App = () => {
               <Route path="" element={<ViewInstructorCourses />} />
               <Route path="details" element={<ViewInstructorDetails />} />
             </Route>
+
+            <Route path="/blog" element={<BlogLayout />}>
+              <Route path="" element={<BlogList />} />
+              <Route path=":slug" element={<BlogDetail />} />
+            </Route>
+
             <Route path='*' element={<NotFound />} />
           </Routes>
           <Footer />
