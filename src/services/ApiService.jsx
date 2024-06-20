@@ -20,7 +20,7 @@ const ApiService = {
       console.error("Network error:", error);
       return {
         success: false,
-        error: error.response?.data?.error || "Network error",
+        error: error.response?.data || "Network error",
       };
     }
   },
