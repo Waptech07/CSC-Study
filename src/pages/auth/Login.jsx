@@ -29,7 +29,10 @@ const Login = () => {
         toast.success("Login successful!");
         navigate("/");
       } else {
-        toast.error(response.error || "Invalid credentials");
+        const errorMessages = Object.values(response.error).flat();
+        errorMessages.forEach((message) =>
+          toast.error(message, { autoClose: 2000 })
+        );
       }
     } catch (err) {
       setLoading(false);
