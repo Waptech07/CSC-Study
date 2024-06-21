@@ -63,9 +63,9 @@ const TopCategories = () => {
             }}
             pagination={{ clickable: true }}
           >
-            {categories.map(({ id, name, image, course_count }) => (
+            {categories.map(({ id, name, image, course_count, slug }) => (
               <SwiperSlide key={id}>
-                <Link to={`/category/${id}`}>
+                <Link to={`/category/${slug}`}>
                   <div className="border border-blue-300 hover:shadow-lg transition-shadow duration-300 hover:shadow-blue-300 py-6 px-2 mb-10">
                     <div className="flex flex-col justify-center items-center">
                       <img

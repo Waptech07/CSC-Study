@@ -8,7 +8,7 @@ import NoCoursesAvailable from "../../components/NoCoursesAvailable";
 import Loading from "../../components/Loading";
 
 const CategoryCoursesPage = () => {
-  const { categoryId } = useParams();
+  const { categorySlug } = useParams();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categoryName, setCategoryName] = useState("");
@@ -16,8 +16,9 @@ const CategoryCoursesPage = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const data = await getCoursesByCategory(categoryId);
+        const data = await getCoursesByCategory(categorySlug);
         setCourses(data);
+        console.log(data)
 
         if (data.length > 0) {
           setCategoryName(data[0].category.name);
@@ -25,11 +26,11 @@ const CategoryCoursesPage = () => {
 
         const coursesWithInstructors = await Promise.all(
           data.map(async (course) => {
-            const instructor = await getInstructorDetails(course.instructor);
+            const instructor = await getInstructorDetails(course.instructor.slug);
             return { ...course, instructor };
           })
         );
-
+        
         setCourses(coursesWithInstructors);
         setLoading(false);
       } catch (error) {
@@ -39,7 +40,7 @@ const CategoryCoursesPage = () => {
     };
 
     fetchCourses();
-  }, [categoryId]);
+  }, [categorySlug]);
 
   if (loading) {
     return <Loading />;
@@ -56,12 +57,12 @@ const CategoryCoursesPage = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {courses.map(
-              ({ id, title, short_desc, image, price, instructor }) => (
+              ({ id, title, short_desc, image, price, slug, instructor }) => (
                 <div
                   key={id}
                   className="bg-white border border-gray-200 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
                 >
-                  <Link to={`/courses/${id}`}>
+                  <Link to={`/courses/${slug}`}>
                     {image && (
                       <img
                         src={`${image}`}
@@ -76,7 +77,7 @@ const CategoryCoursesPage = () => {
                   </Link>
                   <div className="flex items-center justify-between gap-4">
                     <Link
-                      to={`/instructor/${instructor.id}`}
+                      to={`/instructor/${instructor.slug}`}
                       className="flex items-center gap-4"
                     >
                       <img
