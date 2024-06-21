@@ -5,7 +5,7 @@ import Loading from "../../components/Loading";
 import { FaBookOpen, FaStar, FaUsers } from "react-icons/fa";
 
 const ViewInstructor = () => {
-  const { id } = useParams();
+  const { instructorSlug } = useParams();
   const [instructor, setInstructor] = useState(null);
   const location = useLocation();
   const isActive = (path) => {
@@ -15,7 +15,7 @@ const ViewInstructor = () => {
   useEffect(() => {
     const fetchInstructor = async () => {
       try {
-        const fetchedInstructor = await getInstructorDetails(id);
+        const fetchedInstructor = await getInstructorDetails(instructorSlug);
         setInstructor(fetchedInstructor);
       } catch (error) {
         console.error("Error fetching instructor details:", error);
@@ -23,7 +23,7 @@ const ViewInstructor = () => {
     };
 
     fetchInstructor();
-  }, [id]);
+  }, [instructorSlug]);
 
   if (!instructor) {
     <Loading />;
@@ -99,11 +99,8 @@ const ViewInstructor = () => {
           <div className="flex-1">
             <div className="flex gap-5 pb-2 pl-5">
               {[
-                { to: `/instructor/${instructor?.id}`, label: "Courses" },
-                {
-                  to: `/instructor/${instructor?.id}/details`,
-                  label: "Details",
-                },
+                { to: `/instructor/${instructor?.slug}`, label: "Courses" },
+                { to: `/instructor/${instructor?.slug}/details`, label: "Details"},
               ].map((link) => (
                 <NavLink
                   key={link.to}

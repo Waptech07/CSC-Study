@@ -4,13 +4,13 @@ import { getInstructorDetails } from "../../../services/coursesApi";
 import Loading from "../../Loading";
 
 const ViewInstructorDetails = () => {
-  const { id } = useParams();
+  const { instructorSlug } = useParams();
   const [instructor, setInstructor] = useState(null);
 
   useEffect(() => {
     const fetchInstructor = async () => {
       try {
-        const fetchedInstructor = await getInstructorDetails(id);
+        const fetchedInstructor = await getInstructorDetails(instructorSlug);
         setInstructor(fetchedInstructor);
       } catch (error) {
         console.error("Error fetching instructor details:", error);
@@ -18,7 +18,7 @@ const ViewInstructorDetails = () => {
     };
 
     fetchInstructor();
-  }, [id]);
+  }, [instructorSlug]);
 
   if (!instructor) {
     <Loading/>

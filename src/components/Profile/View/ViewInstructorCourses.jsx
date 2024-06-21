@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { getInstructorDetails } from "../../../services/coursesApi";
 
 const ViewInstructorCourses = () => {
-  const { id } = useParams();
+  const { instructorSlug } = useParams();
   const [courses, setCourses] = useState([]);
   const [instructor, setInstructor] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,7 +31,7 @@ const ViewInstructorCourses = () => {
   useEffect(() => {
     const fetchInstructor = async () => {
       try {
-        const fetchedInstructor = await getInstructorDetails(id);
+        const fetchedInstructor = await getInstructorDetails(instructorSlug);
         setInstructor(fetchedInstructor);
         setCourses(fetchedInstructor?.courses || []);
       } catch (error) {
@@ -40,7 +40,7 @@ const ViewInstructorCourses = () => {
     };
 
     fetchInstructor();
-  }, [id]);
+  }, [instructorSlug]);
 
   // Pagination logic
   const indexOfLastCourse = currentPage * coursesPerPage;
