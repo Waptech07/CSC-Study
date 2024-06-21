@@ -16,7 +16,7 @@ const ActiveCourses = () => {
         const activeCoursesData = await getActiveCourses();
         const detailedActiveCourses = await Promise.all(
           activeCoursesData.map(async (course) => {
-            const courseDetails = await getCourseDetails(course.course);
+            const courseDetails = await getCourseDetails(course.course.slug);
             return { ...courseDetails, ...course };
           })
         );
@@ -53,7 +53,7 @@ const ActiveCourses = () => {
             </h3>
             <p className="text-gray-600 mb-4">Progress: {course.progress}%</p>
             <Link
-              to={`/courses/${course.course}`}
+              to={`/courses/${course.slug}`}
               className="text-blue-500 hover:underline"
             >
               Continue Course

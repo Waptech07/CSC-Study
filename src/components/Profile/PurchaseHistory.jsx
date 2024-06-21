@@ -17,7 +17,7 @@ const PurchaseHistory = () => {
         const historyData = await getPurchaseHistory();
         const detailedPurchaseHistory = await Promise.all(
           historyData.map(async (item) => {
-            const courseDetails = await getCourseDetails(item.course);
+            const courseDetails = await getCourseDetails(item.course.slug);
             return { ...courseDetails, ...item };
           })
         );

@@ -19,7 +19,7 @@ const AllCourses = () => {
         const enrollmentsData = await getUserEnrollments();
         const detailedEnrollments = await Promise.all(
           enrollmentsData.map(async (enrollment) => {
-            const courseDetails = await getCourseDetails(enrollment.course);
+            const courseDetails = await getCourseDetails(enrollment.course.slug);
             return { ...courseDetails, ...enrollment };
           })
         );
@@ -58,7 +58,7 @@ const AllCourses = () => {
               Instructor: {course.instructor.user.name}
             </p>
             <Link
-              to={`/courses/${course.course}`}
+              to={`/courses/${course.slug}`}
               className="text-blue-500 hover:underline"
             >
               View Course

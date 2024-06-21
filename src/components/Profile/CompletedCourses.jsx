@@ -19,7 +19,7 @@ const CompletedCourses = () => {
         const completedCoursesData = await getCompletedCourses();
         const detailedCompletedCourses = await Promise.all(
           completedCoursesData.map(async (course) => {
-            const courseDetails = await getCourseDetails(course.course);
+            const courseDetails = await getCourseDetails(course.course.slug);
             return { ...courseDetails, ...course };
           })
         );
