@@ -44,6 +44,7 @@ import BlogLayout from './blog/BlogLayout';
 import BlogList from './blog/BlogList';
 import BlogDetail from './blog/BlogDetails';
 import VerifyEmail from './pages/auth/VerifyEmail';
+import CourseReviews from './components/Courses/CourseReviews';
 
 const App = () => {
 
@@ -78,16 +79,17 @@ const App = () => {
               <Route path="settings" element={<InstructorSettings />} />
             </Route>
 
-            <Route path="courses/:courseId" element={<CourseDetailsPage />}>
+            <Route path="courses/:courseSlug" element={<CourseDetailsPage />}>
               <Route path="" element={<CourseOverview />} />
               <Route path="lessons" element={<CourseLessons />} />
+              <Route path="reviews" element={<CourseReviews />} />
             </Route>
             <Route path="/courses" element={<CoursesPage />} />
-            <Route path="/category/:categoryId" element={<CategoryCoursesPage />} />
-            <Route path="/courses/:courseId/lessons/:lessonId" element={<ProtectedRoute><LessonDetails /></ProtectedRoute>} />
+            <Route path="/category/:categorySlug" element={<CategoryCoursesPage />} />
+            <Route path="/courses/:courseSlug/lessons/:lessonSlug" element={<ProtectedRoute><LessonDetails /></ProtectedRoute>} />
             <Route path="/course/:courseId/payment-success" element={<PaymentSuccess />} />
 
-            <Route path="/instructor/:id" element={<ViewInstructor />} >
+            <Route path="/instructor/:instructorSlug" element={<ViewInstructor />} >
               <Route path="" element={<ViewInstructorCourses />} />
               <Route path="details" element={<ViewInstructorDetails />} />
             </Route>
