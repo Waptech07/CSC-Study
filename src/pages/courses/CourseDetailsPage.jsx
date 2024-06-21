@@ -18,7 +18,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 const CourseDetails = () => {
   const { isAuthenticated } = useContext(AuthContext);
-  const { courseId } = useParams();
+  const { courseSlug } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEnrolled, setIsEnrolled] = useState(false);
@@ -30,7 +30,7 @@ const CourseDetails = () => {
   useEffect(() => {
     const fetchCourseDetails = async () => {
       try {
-        const courseDetails = await getCourseDetails(courseId);
+        const courseDetails = await getCourseDetails(courseSlug);
         setCourse(courseDetails);
         setLoading(false);
       } catch (error) {
@@ -41,7 +41,7 @@ const CourseDetails = () => {
 
     const fetchEnrollmentStatus = async () => {
       try {
-        const enrollmentStatus = await checkEnrollment(courseId);
+        const enrollmentStatus = await checkEnrollment(course.id);
         setIsEnrolled(enrollmentStatus.is_enrolled);
       } catch (error) {
         // console.error("Error checking enrollment status:", error);
@@ -50,7 +50,7 @@ const CourseDetails = () => {
 
     fetchCourseDetails();
     fetchEnrollmentStatus();
-  }, [courseId]);
+  }, [courseSlug, course]);
 
   const handleBuyNow = async () => {
     if (!isAuthenticated) {
@@ -63,7 +63,7 @@ const CourseDetails = () => {
 
     // If authenticated, proceed with the purchase process
     try {
-      const paymentData = await initiatePayment(courseId);
+      const paymentData = await initiatePayment(course.id);
       window.location.href = paymentData.data.authorization_url;
     } catch (error) {
       console.error("Error initiating payment:", error);
@@ -100,7 +100,7 @@ const CourseDetails = () => {
               />
               <div>
                 <p className="text-sm text-gray-600">Created by</p>
-                <Link to={`/instructor/${course.instructor.id}`}>
+                <Link to={`/instructor/${course.instructor.slug}`}>
                   <p className="text-lg font-semibold">
                     {course.instructor.user.name}
                   </p>
@@ -120,8 +120,9 @@ const CourseDetails = () => {
           <div className="mb-4">
             <div className="flex gap-5 pb-2 pl-5">
               {[
-                { to: `/courses/${course.id}`, label: "Overview" },
-                { to: `/courses/${course.id}/lessons`, label: "Lessons" },
+                { to: `/courses/${course.slug}`, label: "Overview" },
+                { to: `/courses/${course.slug}/lessons`, label: "Lessons" },
+                { to: `/courses/${course.slug}/reviews`, label: "Reviews" },
               ].map((link) => (
                 <NavLink
                   key={link.to}

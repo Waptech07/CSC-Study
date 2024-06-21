@@ -29,7 +29,9 @@ const CoursesPage = () => {
         }
         const coursesWithInstructors = await Promise.all(
           fetchedCourses.map(async (course) => {
-            const instructor = await getInstructorDetails(course.instructor);
+            const instructor = await getInstructorDetails(
+              course.instructor.slug
+            );
             return { ...course, instructor };
           })
         );
@@ -62,7 +64,7 @@ const CoursesPage = () => {
       const searchResults = await searchCourses(searchQuery);
       const coursesWithInstructors = await Promise.all(
         searchResults.map(async (course) => {
-          const instructor = await getInstructorDetails(course.instructor);
+          const instructor = await getInstructorDetails(course.instructor.slug);
           return { ...course, instructor };
         })
       );
@@ -108,7 +110,7 @@ const CoursesPage = () => {
         >
           <option value="">All Categories</option>
           {categories.map((category) => (
-            <option key={category.id} value={category.id}>
+            <option key={category.id} value={category.slug}>
               {category.name}
             </option>
           ))}
@@ -128,25 +130,22 @@ const CoursesPage = () => {
               transition={{ duration: 1.5 }}
               className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition duration-300"
             >
-              <Link to={`/courses/${course.id}`}>
+              <Link to={`/courses/${course.slug}`}>
                 <img
-                  src={
-                    `${course.image}` ||
-                    "https://via.placeholder.com/150"
-                  }
+                  src={`${course.image}` || "https://via.placeholder.com/150"}
                   alt={course.title}
                   className="w-full h-48 object-cover"
                 />
               </Link>
               <div className="p-6">
-                <Link to={`/courses/${course.id}`}>
+                <Link to={`/courses/${course.slug}`}>
                   <h2 className="text-2xl font-bold text-gray-800 mb-3">
                     {course.title}
                   </h2>
+                  <p className="text-gray-600 mb-4">{course.short_desc}</p>
                 </Link>
-                <p className="text-gray-600 mb-4">{course.short_desc}</p>
-                <Link to={`/instructor/${course.instructor.id}`}>
-                  <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between">
+                  <Link to={`/instructor/${course.instructor.slug}`}>
                     <div className="flex items-center">
                       <img
                         src={`${course.instructor?.user?.profile_picture}`}
@@ -157,11 +156,11 @@ const CoursesPage = () => {
                         {course.instructor.user.name}
                       </p>
                     </div>
-                    <p className="text-lg font-semibold text-gray-800">
-                      &#8358;{course.price.toLocaleString()}
-                    </p>
-                  </div>
-                </Link>
+                  </Link>
+                  <p className="text-lg font-semibold text-gray-800">
+                    &#8358;{course.price.toLocaleString()}
+                  </p>
+                </div>
               </div>
             </motion.div>
           ))}

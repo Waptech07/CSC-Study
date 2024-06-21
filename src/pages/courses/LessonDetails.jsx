@@ -10,7 +10,7 @@ import { BigPlayButton, LoadingSpinner, Player } from "video-react";
 import "video-react/dist/video-react.css"; // import video-react styles
 
 const LessonDetails = () => {
-  const { courseId, lessonId } = useParams();
+  const { courseId, lessonId, courseSlug, lessonSlug } = useParams();
   const [lesson, setLesson] = useState(null);
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,8 +19,8 @@ const LessonDetails = () => {
     const fetchLessonAndCourseDetails = async () => {
       try {
         const [lessonData, courseData] = await Promise.all([
-          getLessonDetails(courseId, lessonId),
-          getCourseDetails(courseId),
+          getLessonDetails(courseSlug, lessonSlug),
+          getCourseDetails(courseSlug),
         ]);
         setLesson(lessonData);
         setCourse(courseData);
