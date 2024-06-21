@@ -12,12 +12,41 @@ export const getCourses = async () => {
   }
 };
 
-export const getCourseDetails = async (courseId) => {
+export const getCourseDetails = async (courseSlug) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/${courseId}/`);
+    const response = await axios.get(`${API_BASE_URL}/course/${courseSlug}/`);
     return response.data;
   } catch (error) {
     console.error("Error fetching course details:", error);
+    throw error;
+  }
+};
+
+export const getCourseReviews = async (courseId) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/course/${courseId}/reviews/`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching course reviews:', error);
+    throw error;
+  }
+};
+
+export const addCourseReview = async (courseId, reviewData) => {
+  const token = localStorage.getItem('access_token');
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/course/${courseId}/reviews/`,
+      reviewData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error adding course review:', error);
     throw error;
   }
 };
@@ -96,12 +125,12 @@ export const getCourseLessons = async (courseId) => {
   }
 };
 
-export const getLessonDetails = async (courseId, lessonId) => {
+export const getLessonDetails = async (courseSlug, lessonSlug) => {
   const token = localStorage.getItem("access_token");
 
   try {
     const response = await axios.get(
-      `${API_BASE_URL}/${courseId}/lessons/${lessonId}/`,
+      `${API_BASE_URL}/${courseSlug}/lesson/${lessonSlug}/`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -125,10 +154,10 @@ export const getInstructors = async () => {
   }
 };
 
-export const getInstructorDetails = async (instructorId) => {
+export const getInstructorDetails = async (instructorSlug) => {
   try {
     const response = await axios.get(
-      `${API_BASE_URL}/instructors/${instructorId}/`
+      `${API_BASE_URL}/instructor/${instructorSlug}/`
     );
     return response.data;
   } catch (error) {
@@ -139,7 +168,7 @@ export const getInstructorDetails = async (instructorId) => {
 
 export const getInstructorDetailsByUserId = async (userId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/instructors/user/${userId}/`);
+    const response = await fetch(`${API_BASE_URL}/instructor/user/${userId}/`);
     const data = await response.json();
     return data;
   } catch (error) {
@@ -157,10 +186,10 @@ export const getCategories = async () => {
   }
 };
 
-export const getCoursesByCategory = async (categoryId) => {
+export const getCoursesByCategory = async (categorySlug) => {
   try {
     const response = await axios.get(
-      `${API_BASE_URL}/categories/${categoryId}/courses/`
+      `${API_BASE_URL}/category/${categorySlug}/courses/`
     );
     return response.data;
   } catch (error) {
@@ -219,7 +248,7 @@ export const addLesson = async (courseId, lessonData) => {
 
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/${courseId}/lessons/create/`,
+      `${API_BASE_URL}/${courseId}/lesson/create/`,
       lessonData,
       {
         headers: {
@@ -239,7 +268,7 @@ export const updateLesson = async (courseId, lessonId, lessonData) => {
 
   try {
     const response = await axios.put(
-      `${API_BASE_URL}/${courseId}/lessons/${lessonId}/update/`,
+      `${API_BASE_URL}/${courseId}/lesson/${lessonId}/update/`,
       lessonData,
       {
         headers: {
@@ -257,7 +286,7 @@ export const updateLesson = async (courseId, lessonId, lessonData) => {
 export const deleteLesson = async (courseId, lessonId) => {
   const token = localStorage.getItem("access_token");
   const response = await axios.delete(
-    `${API_BASE_URL}/${courseId}/lessons/${lessonId}/delete/`,
+    `${API_BASE_URL}/${courseId}/lesson/${lessonId}/delete/`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -333,7 +362,7 @@ export const completeLesson = async (courseId, lessonId) => {
   const token = localStorage.getItem("access_token");
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/${courseId}/lessons/${lessonId}/complete/`,
+      `${API_BASE_URL}/${courseId}/lesson/${lessonId}/complete/`,
       {},
       {
         headers: {
