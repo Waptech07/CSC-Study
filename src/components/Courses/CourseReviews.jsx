@@ -9,7 +9,7 @@ import {
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import Loading from "../../components/Loading";
 
 const CourseReviews = () => {
@@ -19,7 +19,10 @@ const CourseReviews = () => {
   const [reviews, setReviews] = useState([]);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [newReview, setNewReview] = useState({ rating: 0, comment: "" });
+  const [newReview, setNewReview] = useState({
+    rating: 0,
+    comment: "",
+  });
 
   useEffect(() => {
     const fetchCourseDetailsAndReviews = async () => {
@@ -88,7 +91,7 @@ const CourseReviews = () => {
     }
 
     try {
-      await addCourseReview(course.id, newReview);
+      await addCourseReview(course.id, newReview); // newReview already does not include user field
       setNewReview({ rating: 0, comment: "" });
       const updatedReviews = await getCourseReviews(course.id);
       setReviews(Array.isArray(updatedReviews) ? updatedReviews : []);
@@ -99,25 +102,40 @@ const CourseReviews = () => {
     }
   };
 
+  const renderStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+    return (
+      <>
+        {[...Array(fullStars)].map((_, i) => (
+          <FaStar key={i} color="gold" />
+        ))}
+        {hasHalfStar && <FaStarHalfAlt color="gold" />}
+        {[...Array(emptyStars)].map((_, i) => (
+          <FaStar key={fullStars + 1 + i} color="gray" />
+        ))}
+      </>
+    );
+  };
+
   if (loading) {
     return <Loading />;
   }
+
+  const roundedRating = Math.round(course?.average_rating * 10) / 10;
 
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg">
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold mb-6 text-blue-600">Reviews</h2>
-        <h2 className="text-2xl font-bold">
-          Course Ratings :{" "}
-          <span className="flex">
-            {[...Array(5)].map((_, i) => (
-              <FaStar
-                key={i}
-                color={i < course?.average_rating ? "gold" : "gray"}
-              />
-            ))}
+        <h2 className="text-4xl font-bold flex flex-col justify-center items-center">
+          {roundedRating}
+          <span className="flex">{renderStars(roundedRating)}</span>
+          <span className="text-sm font-normal text-gray-700">
+            Course Ratings
           </span>
-          {course?.average_rating}
         </h2>
       </div>
       <div className="reviews-list">
@@ -130,14 +148,7 @@ const CourseReviews = () => {
             <div key={review.id} className="py-3">
               <p className="flex justify-between items-center">
                 <strong className="capitalize">{review.user.name}</strong>
-                <span className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <FaStar
-                      key={i}
-                      color={i < review.rating ? "gold" : "gray"}
-                    />
-                  ))}
-                </span>
+                <span className="flex">{renderStars(review.rating)}</span>
               </p>
               <p className="text-gray-700">{review.comment}</p>
               {index < reviews.length - 1 && (
