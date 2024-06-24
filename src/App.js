@@ -45,6 +45,7 @@ import BlogList from './blog/BlogList';
 import BlogDetail from './blog/BlogDetails';
 import VerifyEmail from './pages/auth/VerifyEmail';
 import CourseReviews from './components/Courses/CourseReviews';
+import FAQs from './components/FAQs';
 
 const App = () => {
 
@@ -99,6 +100,7 @@ const App = () => {
               <Route path=":slug" element={<BlogDetail />} />
             </Route>
 
+            <Route path='/faqs' element={<FAQs/>}/>
             <Route path='*' element={<NotFound />} />
           </Routes>
           <Footer />
