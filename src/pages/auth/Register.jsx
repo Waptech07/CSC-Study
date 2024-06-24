@@ -9,7 +9,10 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
@@ -32,6 +35,8 @@ const Register = () => {
   });
   const [errors, setErrors] = useState({});
   const [recaptchaToken, setRecaptchaToken] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -51,7 +56,7 @@ const Register = () => {
 
   const handleRecaptchaChange = (token) => {
     setRecaptchaToken(token);
-    console.log(`recaptcha ${token}`)
+    console.log(`recaptcha ${token}`);
   };
 
   const handleRegister = async (e) => {
@@ -96,6 +101,14 @@ const Register = () => {
     }
   };
 
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleClickShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center py-5 bg-gray-100">
       <motion.div
@@ -119,16 +132,26 @@ const Register = () => {
             Register
           </h2>
           <form className="flex flex-col gap-5" onSubmit={handleRegister}>
+            <TextField
+              label="Name"
+              variant="outlined"
+              fullWidth
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              error={!!errors.name}
+              helperText={errors.name ? errors.name.join(", ") : ""}
+            />
             <div className="flex md:flex-row flex-col gap-3">
               <TextField
-                label="Name"
+                label="Email"
                 variant="outlined"
                 fullWidth
-                name="name"
-                value={formData.name}
+                name="email"
+                value={formData.email}
                 onChange={handleInputChange}
-                error={!!errors.name}
-                helperText={errors.name ? errors.name.join(", ") : ""}
+                error={!!errors.email}
+                helperText={errors.email ? errors.email.join(", ") : ""}
               />
               <TextField
                 label="Username"
@@ -139,40 +162,6 @@ const Register = () => {
                 onChange={handleInputChange}
                 error={!!errors.username}
                 helperText={errors.username ? errors.username.join(", ") : ""}
-              />
-            </div>
-            <TextField
-              label="Email"
-              variant="outlined"
-              fullWidth
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              error={!!errors.email}
-              helperText={errors.email ? errors.email.join(", ") : ""}
-            />
-            <div className="flex md:flex-row flex-col gap-3">
-              <TextField
-                label="Password"
-                type="password"
-                variant="outlined"
-                fullWidth
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                error={!!errors.password}
-                helperText={errors.password ? errors.password.join(", ") : ""}
-              />
-              <TextField
-                label="Confirm Password"
-                type="password"
-                variant="outlined"
-                fullWidth
-                name="password2"
-                value={formData.password2}
-                onChange={handleInputChange}
-                error={!!errors.password2}
-                helperText={errors.password2 ? errors.password2 : ""}
               />
             </div>
             <FormControl variant="outlined" fullWidth error={!!errors.gender}>
@@ -193,6 +182,60 @@ const Register = () => {
                 </Typography>
               )}
             </FormControl>
+            <div className="flex md:flex-row flex-col gap-3">
+              <TextField
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                variant="outlined"
+                fullWidth
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                error={!!errors.password}
+                helperText={errors.password ? errors.password.join(", ") : ""}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                label="Confirm Password"
+                type={showConfirmPassword ? "text" : "password"}
+                variant="outlined"
+                fullWidth
+                name="password2"
+                value={formData.password2}
+                onChange={handleInputChange}
+                error={!!errors.password2}
+                helperText={errors.password2 ? errors.password2 : ""}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle confirm password visibility"
+                        onClick={handleClickShowConfirmPassword}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </div>
             <div className="flex md:flex-row flex-col gap-3">
               <FormControlLabel
                 control={
