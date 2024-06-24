@@ -106,16 +106,16 @@ const Chatbot = () => {
             exit={{ opacity: 0, y: 50 }}
             className="bg-white shadow-2xl rounded-lg overflow-hidden w-80 h-96 flex flex-col border border-gray-200"
           >
-            <div className="p-4 overflow-y-auto relative">
+            <div className="p-4 overflow-y-auto relative flex-1">
               {messages.map((message, index) => (
                 <div
-                  className={`mb-2 ${
-                    message.isBot ? "text-left" : "text-right"
+                  key={index}
+                  className={`mb-2 flex ${
+                    message.isBot ? "justify-start" : "justify-end"
                   }`}
                 >
                   <div
-                    key={index}
-                    className={`mb-2 p-3 inline-block rounded-lg max-w-[85%] break-words ${
+                    className={`p-3 rounded-lg max-w-[85%] break-words ${
                       message.isBot ? "bg-gray-100" : "bg-blue-500 text-white"
                     }`}
                   >
@@ -137,7 +137,7 @@ const Chatbot = () => {
                 placeholder="Type your message..."
               />
               <button
-                onClick={handleSendMessage}
+                type="submit"
                 className="bg-blue-600 text-white p-3 rounded-lg shadow-md hover:bg-blue-800
                 focus:outline-none transform transition-transform duration-300"
               >
