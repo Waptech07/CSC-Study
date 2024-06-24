@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -47,64 +47,75 @@ import VerifyEmail from './pages/auth/VerifyEmail';
 import CourseReviews from './components/Courses/CourseReviews';
 import FAQs from './components/FAQs';
 
-const App = () => {
+const AppContent = () => {
+  const location = useLocation();
+  const isLessonDetailsPage = location.pathname.startsWith("/courses/") && location.pathname.includes("/lessons/");
+  const isBlogPage = location.pathname.startsWith("/blog");
 
+  return (
+    <>
+      {!isLessonDetailsPage && !isBlogPage && <NavBar />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<AboutUsPage />} />
+        <Route path="/contact" element={<ContactUsPage />} />
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-email/:uid/:token" element={<VerifyEmail />} />
+        <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
+
+        <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}>
+          <Route path="" element={<MyProfile />} />
+          <Route path="all-courses" element={<AllCourses />} />
+          <Route path="active-courses" element={<ActiveCourses />} />
+          <Route path="completed-courses" element={<CompletedCourses />} />
+          <Route path="purchase-history" element={<PurchaseHistory />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+
+        <Route path="/my-profile" element={<ProtectedRoute><InstructorProfile /></ProtectedRoute>}>
+          <Route path="" element={<InstructorCourses />} />
+          <Route path="settings" element={<InstructorSettings />} />
+        </Route>
+
+        <Route path="courses/:courseSlug" element={<CourseDetailsPage />}>
+          <Route path="" element={<CourseOverview />} />
+          <Route path="lessons" element={<CourseLessons />} />
+          <Route path="reviews" element={<CourseReviews />} />
+        </Route>
+        <Route path="/courses" element={<CoursesPage />} />
+        <Route path="/category/:categorySlug" element={<CategoryCoursesPage />} />
+        <Route path="/courses/:courseSlug/lessons/:lessonSlug" element={<ProtectedRoute><LessonDetails /></ProtectedRoute>} />
+        <Route path="/course/:courseId/payment-success" element={<PaymentSuccess />} />
+
+        <Route path="/instructor/:instructorSlug" element={<ViewInstructor />} >
+          <Route path="" element={<ViewInstructorCourses />} />
+          <Route path="details" element={<ViewInstructorDetails />} />
+        </Route>
+
+        <Route path="/blog" element={<BlogLayout />}>
+          <Route path="" element={<BlogList />} />
+          <Route path=":slug" element={<BlogDetail />} />
+        </Route>
+
+        <Route path='/faqs' element={<FAQs />} />
+        <Route path='*' element={<NotFound />} />
+      </Routes>
+      {!isLessonDetailsPage && <Footer />}
+      <Chatbot />
+    </>
+  );
+};
+
+const App = () => {
   return (
     <div className='h-[100vh] bg-gray-100'>
       <Router>
         <AuthProvider>
           <ToastContainer />
-          <NavBar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<AboutUsPage />} />
-            <Route path="/contact" element={<ContactUsPage />} />
-
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/verify-email/:uid/:token" element={<VerifyEmail />} />
-            <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
-
-            <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}>
-              <Route path="" element={<MyProfile />} />
-              <Route path="all-courses" element={<AllCourses />} />
-              <Route path="active-courses" element={<ActiveCourses />} />
-              <Route path="completed-courses" element={<CompletedCourses />} />
-              <Route path="purchase-history" element={<PurchaseHistory />} />
-              <Route path="settings" element={<Settings />} />
-            </Route>
-
-            <Route path="/my-profile" element={<ProtectedRoute><InstructorProfile /></ProtectedRoute>}>
-              <Route path="" element={<InstructorCourses />} />
-              <Route path="settings" element={<InstructorSettings />} />
-            </Route>
-
-            <Route path="courses/:courseSlug" element={<CourseDetailsPage />}>
-              <Route path="" element={<CourseOverview />} />
-              <Route path="lessons" element={<CourseLessons />} />
-              <Route path="reviews" element={<CourseReviews />} />
-            </Route>
-            <Route path="/courses" element={<CoursesPage />} />
-            <Route path="/category/:categorySlug" element={<CategoryCoursesPage />} />
-            <Route path="/courses/:courseSlug/lessons/:lessonSlug" element={<ProtectedRoute><LessonDetails /></ProtectedRoute>} />
-            <Route path="/course/:courseId/payment-success" element={<PaymentSuccess />} />
-
-            <Route path="/instructor/:instructorSlug" element={<ViewInstructor />} >
-              <Route path="" element={<ViewInstructorCourses />} />
-              <Route path="details" element={<ViewInstructorDetails />} />
-            </Route>
-
-            <Route path="/blog" element={<BlogLayout />}>
-              <Route path="" element={<BlogList />} />
-              <Route path=":slug" element={<BlogDetail />} />
-            </Route>
-
-            <Route path='/faqs' element={<FAQs/>}/>
-            <Route path='*' element={<NotFound />} />
-          </Routes>
-          <Footer />
-          <Chatbot />
+          <AppContent />
         </AuthProvider>
       </Router>
     </div>
