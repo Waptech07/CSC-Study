@@ -1,17 +1,25 @@
 import React, { useState, useContext, useEffect } from "react";
-import { TextField, Button, Typography } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
 import { motion } from "framer-motion";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import illustration from "../../assets/login.png";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
   const { isAuthenticated, login } = useContext(AuthContext);
   const navigate = useNavigate();
   const [username_or_email, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -38,6 +46,10 @@ const Login = () => {
       setLoading(false);
       toast.error("Please Check Your Internet Connection");
     }
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -75,11 +87,24 @@ const Login = () => {
             />
             <TextField
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               variant="outlined"
               fullWidth
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Link
               to="/forgot-password"
