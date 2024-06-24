@@ -127,75 +127,81 @@ const CourseReviews = () => {
   const roundedRating = Math.round(course?.average_rating * 10) / 10;
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg">
-      <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold mb-6 text-blue-600">Reviews</h2>
-        <h2 className="text-4xl font-bold flex flex-col justify-center items-center">
-          {roundedRating}
-          <span className="flex">{renderStars(roundedRating)}</span>
-          <span className="text-sm font-normal text-gray-700">
-            Course Ratings
-          </span>
-        </h2>
-      </div>
-      <div className="reviews-list">
-        {reviews.length === 0 ? (
-          <p className="text-center text-gray-500 py-4">
-            No reviews yet. Be the first to review this course!
-          </p>
-        ) : (
-          reviews.map((review, index) => (
-            <div key={review.id} className="py-3">
-              <p className="flex justify-between items-center">
-                <strong className="capitalize">{review.user.name}</strong>
-                <span className="flex">{renderStars(review.rating)}</span>
-              </p>
-              <p className="text-gray-700">{review.comment}</p>
-              {index < reviews.length - 1 && (
-                <hr className="w-full h-px my-4 bg-gray-200 border-0" />
-              )}
+    <div>
+      <div className="p-6 bg-white shadow-lg rounded-lg">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+          <h2 className="text-3xl font-bold text-blue-600 mb-4 md:mb-0">
+            Reviews
+          </h2>
+          <div className="text-center">
+            <h2 className="text-4xl font-bold mb-1">{roundedRating}</h2>
+            <div className="flex justify-center mb-1">
+              {renderStars(roundedRating)}
             </div>
-          ))
+            <span className="text-sm font-normal text-gray-700">
+              Course Ratings
+            </span>
+          </div>
+        </div>
+        <div className="reviews-list mb-8">
+          {reviews.length === 0 ? (
+            <p className="text-center text-gray-500 py-4">
+              No reviews yet. Be the first to review this course!
+            </p>
+          ) : (
+            reviews.map((review, index) => (
+              <div key={review.id} className="py-3 border-b last:border-b-0">
+                <div className="flex justify-between items-center mb-2">
+                  <strong className="capitalize">{review.user.name}</strong>
+                  <div className="flex">{renderStars(review.rating)}</div>
+                </div>
+                <p className="text-gray-700">{review.comment}</p>
+              </div>
+            ))
+          )}
+        </div>
+        {isEnrolled ? (
+          <form
+            onSubmit={handleSubmit}
+            className="bg-gray-50 p-6 rounded-lg shadow-inner"
+          >
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Rating:</label>
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <FaStar
+                    key={i}
+                    size={30}
+                    onClick={() => handleStarClick(i + 1)}
+                    color={i < newReview.rating ? "gold" : "gray"}
+                    className="cursor-pointer"
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Comment:</label>
+              <textarea
+                name="comment"
+                value={newReview.comment}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+            >
+              Submit Review
+            </button>
+          </form>
+        ) : (
+          <p className="text-center text-red-500">
+            You need to be enrolled in the course to submit a review.
+          </p>
         )}
       </div>
-      {isEnrolled ? (
-        <form onSubmit={handleSubmit} className="mb-8">
-          <div className="mb-4">
-            <label className="block text-gray-700">Rating:</label>
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <FaStar
-                  key={i}
-                  size={30}
-                  onClick={() => handleStarClick(i + 1)}
-                  color={i < newReview.rating ? "gold" : "gray"}
-                  className="cursor-pointer"
-                />
-              ))}
-            </div>
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Comment:</label>
-            <textarea
-              name="comment"
-              value={newReview.comment}
-              onChange={handleInputChange}
-              required
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
-          >
-            Submit Review
-          </button>
-        </form>
-      ) : (
-        <p className="text-center text-red-500">
-          You need to be enrolled in the course to submit a review.
-        </p>
-      )}
     </div>
   );
 };
