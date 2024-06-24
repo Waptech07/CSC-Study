@@ -249,7 +249,7 @@ const Register = () => {
                 label="Register as Instructor"
               />
               <ReCAPTCHA
-                sitekey="6Lelx_8pAAAAAJIBtaNT6ZxtGBVbjYLydJG82Zwf"
+                sitekey="6Ldlyv8pAAAAAHZkFeCrKu0qax-Sc-Emqp1uoTPi"
                 onChange={handleRecaptchaChange}
               />
             </div>
