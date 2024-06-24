@@ -40,7 +40,7 @@ const CourseLessons = () => {
             <Link
               to={
                 enrollmentStatus
-                  ? `/courses/${course.id}/lessons/${lesson.id}`
+                  ? `/courses/${course.slug}/lessons/${lesson.slug}`
                   : "#"
               }
               key={lesson.id}
