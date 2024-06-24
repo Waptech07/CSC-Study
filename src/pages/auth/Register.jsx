@@ -15,6 +15,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ReCAPTCHA from "react-google-recaptcha";
 import illustration from "../../assets/register.png";
 
 const Register = () => {
@@ -30,6 +31,7 @@ const Register = () => {
     isInstructor: false,
   });
   const [errors, setErrors] = useState({});
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -47,12 +49,22 @@ const Register = () => {
     setFormData((prevData) => ({ ...prevData, [name]: checked }));
   };
 
+  const handleRecaptchaChange = (token) => {
+    setRecaptchaToken(token);
+    console.log(`recaptcha ${token}`)
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.password2) {
       setErrors({ password2: "Passwords do not match" });
       toast.warning("Passwords do not match", { autoClose: 2000 });
+      return;
+    }
+
+    if (!recaptchaToken) {
+      toast.warning("Please complete the reCAPTCHA", { autoClose: 2000 });
       return;
     }
 
@@ -64,7 +76,8 @@ const Register = () => {
         formData.password,
         formData.password2,
         formData.isInstructor,
-        formData.gender
+        formData.gender,
+        recaptchaToken
       );
 
       if (response.success) {
@@ -91,7 +104,7 @@ const Register = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="hidden md:flex md:w-1/2 bg-blue-600 justify-center items-center">
+        <div className="hidden lg:flex md:w-2/5 bg-blue-600 justify-center items-center">
           <motion.img
             src={illustration}
             alt="welcome"
@@ -101,31 +114,33 @@ const Register = () => {
             transition={{ delay: 0.3 }}
           />
         </div>
-        <div className="w-full md:w-1/2 p-8">
+        <div className="w-full lg:w-3/5 p-8">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-4">
             Register
           </h2>
           <form className="flex flex-col gap-5" onSubmit={handleRegister}>
-            <TextField
-              label="Name"
-              variant="outlined"
-              fullWidth
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              error={!!errors.name}
-              helperText={errors.name ? errors.name.join(", ") : ""}
-            />
-            <TextField
-              label="Username"
-              variant="outlined"
-              fullWidth
-              name="username"
-              value={formData.username}
-              onChange={handleInputChange}
-              error={!!errors.username}
-              helperText={errors.username ? errors.username.join(", ") : ""}
-            />
+            <div className="flex md:flex-row flex-col gap-3">
+              <TextField
+                label="Name"
+                variant="outlined"
+                fullWidth
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                error={!!errors.name}
+                helperText={errors.name ? errors.name.join(", ") : ""}
+              />
+              <TextField
+                label="Username"
+                variant="outlined"
+                fullWidth
+                name="username"
+                value={formData.username}
+                onChange={handleInputChange}
+                error={!!errors.username}
+                helperText={errors.username ? errors.username.join(", ") : ""}
+              />
+            </div>
             <TextField
               label="Email"
               variant="outlined"
@@ -136,39 +151,30 @@ const Register = () => {
               error={!!errors.email}
               helperText={errors.email ? errors.email.join(", ") : ""}
             />
-            <TextField
-              label="Password"
-              type="password"
-              variant="outlined"
-              fullWidth
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              error={!!errors.password}
-              helperText={errors.password ? errors.password.join(", ") : ""}
-            />
-            <TextField
-              label="Confirm Password"
-              type="password"
-              variant="outlined"
-              fullWidth
-              name="password2"
-              value={formData.password2}
-              onChange={handleInputChange}
-              error={!!errors.password2}
-              helperText={errors.password2 ? errors.password2 : ""}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={formData.isInstructor}
-                  onChange={handleCheckboxChange}
-                  name="isInstructor"
-                  color="primary"
-                />
-              }
-              label="Register as Instructor"
-            />
+            <div className="flex md:flex-row flex-col gap-3">
+              <TextField
+                label="Password"
+                type="password"
+                variant="outlined"
+                fullWidth
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                error={!!errors.password}
+                helperText={errors.password ? errors.password.join(", ") : ""}
+              />
+              <TextField
+                label="Confirm Password"
+                type="password"
+                variant="outlined"
+                fullWidth
+                name="password2"
+                value={formData.password2}
+                onChange={handleInputChange}
+                error={!!errors.password2}
+                helperText={errors.password2 ? errors.password2 : ""}
+              />
+            </div>
             <FormControl variant="outlined" fullWidth error={!!errors.gender}>
               <InputLabel>Gender</InputLabel>
               <Select
@@ -187,6 +193,23 @@ const Register = () => {
                 </Typography>
               )}
             </FormControl>
+            <div className="flex md:flex-row flex-col gap-3">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={formData.isInstructor}
+                    onChange={handleCheckboxChange}
+                    name="isInstructor"
+                    color="primary"
+                  />
+                }
+                label="Register as Instructor"
+              />
+              <ReCAPTCHA
+                sitekey="6Lelx_8pAAAAAJIBtaNT6ZxtGBVbjYLydJG82Zwf"
+                onChange={handleRecaptchaChange}
+              />
+            </div>
             <Button variant="contained" color="primary" fullWidth type="submit">
               Register
             </Button>
