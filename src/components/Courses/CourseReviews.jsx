@@ -129,7 +129,7 @@ const CourseReviews = () => {
   return (
     <div>
       <div className="p-6 bg-white shadow-lg rounded-lg">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold text-blue-600 mb-4 md:mb-0">
             Reviews
           </h2>
