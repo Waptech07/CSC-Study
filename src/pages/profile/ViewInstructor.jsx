@@ -3,6 +3,8 @@ import { NavLink, Outlet, useLocation, useParams } from "react-router-dom";
 import { getInstructorDetails } from "../../services/coursesApi";
 import Loading from "../../components/Loading";
 import { FaBookOpen, FaStar, FaUsers } from "react-icons/fa";
+import malePlaceholder from "../../assets/male-placeholder.jpg";
+import femalePlaceholder from "../../assets/female-placeholder.jpg";
 
 const ViewInstructor = () => {
   const { instructorSlug } = useParams();
@@ -36,12 +38,15 @@ const ViewInstructor = () => {
           <div className="flex flex-col justify-center items-center w-full lg:w-1/3 bg-white shadow-md rounded-lg py-10 gap-5">
             <img
               src={
-                instructor?.user.profile_picture
-                  ? `${instructor?.user.profile_picture}`
-                  : "https://via.placeholder.com/150"
+                instructor?.user.profile_picture ||
+                (instructor?.user.gender === "M"
+                  ? malePlaceholder
+                  : instructor?.user.gender === "F"
+                  ? femalePlaceholder
+                  : "https://via.placeholder.com/150")
               }
+              alt="Instructor"
               className="rounded-full w-60 h-60"
-              alt="profile"
             />
             <div className="flex flex-col justify-center items-center">
               <p className="text-black font-bold text-3xl">
@@ -100,7 +105,10 @@ const ViewInstructor = () => {
             <div className="flex gap-5 pb-2 pl-5">
               {[
                 { to: `/instructor/${instructor?.slug}`, label: "Courses" },
-                { to: `/instructor/${instructor?.slug}/details`, label: "Details"},
+                {
+                  to: `/instructor/${instructor?.slug}/details`,
+                  label: "Details",
+                },
               ].map((link) => (
                 <NavLink
                   key={link.to}
