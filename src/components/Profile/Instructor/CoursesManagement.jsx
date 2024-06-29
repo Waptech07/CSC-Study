@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  TextField,
-  Typography,
-  Box,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  Button,
-} from "@mui/material";
+import { Typography, Box, Button, Grid } from "@mui/material";
 import { toast } from "react-toastify";
 import {
   addCourse,
@@ -19,31 +9,26 @@ import {
   getCourseLessons,
   getCategories,
   getInstructorDetailsByUserId,
+  updateCourse,
+  updateLesson,
 } from "../../../services/coursesApi";
+import CourseForm from "./courses_management/CourseForm";
+import LessonForm from "./courses_management/LessonForm";
+import CourseList from "./courses_management/CourseList";
+import LessonList from "./courses_management/LessonList";
+import EditCourseDialog from "./courses_management/EditCourseDialog";
+import EditLessonDialog from "./courses_management/EditLessonDialog";
 
 const CoursesManagement = ({ user }) => {
   const [instructor, setInstructor] = useState(null);
   const [courses, setCourses] = useState([]);
-  const [newCourse, setNewCourse] = useState({
-    title: "",
-    short_desc: "",
-    description: "",
-    category: "",
-    price: "",
-    duration: "",
-    image: null,
-  });
+  const [newCourse, setNewCourse] = useState(initialCourseState);
   const [categories, setCategories] = useState([]);
-  const [newLesson, setNewLesson] = useState({
-    title: "",
-    content: "",
-    video: [],
-    images: [],
-    files: [],
-    documents: [],
-  });
+  const [newLesson, setNewLesson] = useState(initialLessonState);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [lessons, setLessons] = useState([]);
+  const [editCourse, setEditCourse] = useState(null);
+  const [editLesson, setEditLesson] = useState(null);
 
   useEffect(() => {
     fetchCourses();
@@ -72,58 +57,46 @@ const CoursesManagement = ({ user }) => {
   };
 
   const handleAddCourse = async () => {
-    const formData = new FormData();
-    formData.append("title", newCourse.title);
-    formData.append("short_desc", newCourse.short_desc);
-    formData.append("description", newCourse.description);
-    formData.append("category", newCourse.category);
-    formData.append("price", newCourse.price);
-    formData.append("duration", newCourse.duration);
-    formData.append("image", newCourse.image);
-    formData.append("instructor", instructor.id);
-
     try {
-      await addCourse(formData);
-      toast.success("Course added successfully");
-      setNewCourse({
-        title: "",
-        short_desc: "",
-        description: "",
-        category: "",
-        price: "",
-        duration: "",
-        image: null,
-      });
-      fetchCourses();
+      const formData = new FormData();
+      formData.append("title", newCourse.title);
+      formData.append("short_desc", newCourse.short_desc);
+      formData.append("description", newCourse.description);
+      formData.append("duration", newCourse.duration);
+      formData.append("category", newCourse.category);
+      formData.append("price", newCourse.price);
+      formData.append("image", newCourse.image);
+      formData.append("instructor", instructor);
+
+      const response = await addCourse(formData);
+      setCourses((prevCourses) => [...prevCourses, response]);
+      setNewCourse(initialCourseState);
     } catch (error) {
-      console.error("Error adding course:", error.response?.data);
-      toast.error("Error adding course");
+      console.error("Error adding course:", error.response.data);
     }
+  };
+
+  const handleImageChange = (e) => {
+    setNewCourse({
+      ...newCourse,
+      image: e.target.files[0],
+    });
   };
 
   const handleAddLesson = async (courseId) => {
     const formData = new FormData();
-    formData.append("title", newLesson.title);
-    formData.append("content", newLesson.content);
-    // formData.append("video", newLesson.video);
-    newLesson.video.forEach((video) => formData.append("video", video));
-    newLesson.images.forEach((image) => formData.append("images", image));
-    newLesson.files.forEach((file) => formData.append("files", file));
-    newLesson.documents.forEach((document) =>
-      formData.append("documents", document)
-    );
+    Object.keys(newLesson).forEach((key) => {
+      if (Array.isArray(newLesson[key])) {
+        newLesson[key].forEach((item) => formData.append(key, item));
+      } else {
+        formData.append(key, newLesson[key]);
+      }
+    });
 
     try {
       await addLesson(courseId, formData);
       toast.success("Lesson added successfully");
-      setNewLesson({
-        title: "",
-        content: "",
-        video: [],
-        images: [],
-        files: [],
-        documents: [],
-      });
+      setNewLesson(initialLessonState);
       fetchCourseLessons(courseId);
     } catch (error) {
       console.error("Error adding lesson:", error.response?.data);
@@ -179,235 +152,122 @@ const CoursesManagement = ({ user }) => {
     setNewLesson((prev) => ({ ...prev, [type]: files }));
   };
 
+  const handleUpdateCourse = async () => {
+    const formData = new FormData();
+    Object.keys(editCourse).forEach((key) => {
+      formData.append(key, editCourse[key]);
+    });
+
+    try {
+      await updateCourse(editCourse.id, formData);
+      toast.success("Course updated successfully");
+      setEditCourse(null);
+      fetchCourses();
+    } catch (error) {
+      console.error("Error updating course:", error.response?.data);
+      toast.error("Error updating course");
+    }
+  };
+
+  const handleUpdateLesson = async () => {
+    const formData = new FormData();
+    Object.keys(editLesson).forEach((key) => {
+      if (Array.isArray(editLesson[key])) {
+        editLesson[key].forEach((item) => formData.append(key, item));
+      } else {
+        formData.append(key, editLesson[key]);
+      }
+    });
+
+    try {
+      await updateLesson(selectedCourse, editLesson.id, formData);
+      toast.success("Lesson updated successfully");
+      setEditLesson(null);
+      fetchCourseLessons(selectedCourse);
+    } catch (error) {
+      console.error("Error updating lesson:", error.response?.data);
+      toast.error("Error updating lesson");
+    }
+  };
+
+  const openEditCourseDialog = (course) => {
+    setEditCourse(course);
+  };
+
+  const openEditLessonDialog = (lesson) => {
+    setEditLesson(lesson);
+  };
+
   return (
     <div className="bg-white p-5 sm:p-10 rounded-md flex flex-col gap-5">
       <Typography variant="h5" className="mb-5">
         Manage Courses
       </Typography>
-      <Box component="form" noValidate autoComplete="off" className="space-y-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <TextField
-            label="Course Title"
-            name="title"
-            value={newCourse.title}
-            onChange={handleCourseInputChange}
-            fullWidth
-          />
-          <TextField
-            label="Short Description"
-            name="short_desc"
-            value={newCourse.short_desc}
-            onChange={handleCourseInputChange}
-            fullWidth
-          />
-          <TextField
-            label="Description"
-            name="description"
-            value={newCourse.description}
-            onChange={handleCourseInputChange}
-            fullWidth
-            multiline
-            maxRows={4}
-          />
-          <FormControl fullWidth>
-            <InputLabel>Category</InputLabel>
-            <Select
-              name="category"
-              value={newCourse.category}
-              onChange={handleCourseInputChange}
-              input={<OutlinedInput label="Category" />}
-            >
-              {categories.map((category) => (
-                <MenuItem key={category.id} value={category.id}>
-                  {category.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            label="Price"
-            name="price"
-            value={newCourse.price}
-            onChange={handleCourseInputChange}
-            fullWidth
-          />
-          <TextField
-            label="Duration"
-            name="duration"
-            value={newCourse.duration}
-            onChange={handleCourseInputChange}
-            placeholder="1:00:00"
-            fullWidth
-          />
-          <Button
-            variant="contained"
-            component="label"
-            className="bg-blue-500 hover:bg-blue-600 text-white"
-          >
-            Upload Image
-            <input
-              type="file"
-              name="image"
-              accept="image/*"
-              hidden
-              onChange={(e) =>
-                setNewCourse((prev) => ({ ...prev, image: e.target.files[0] }))
-              }
-            />
-          </Button>
-        </div>
-        <Button
-          variant="contained"
-          className="bg-green-500 hover:bg-green-600 text-white"
-          onClick={handleAddCourse}
-        >
-          Add Course
-        </Button>
-      </Box>
+      <CourseForm
+        newCourse={newCourse}
+        categories={categories}
+        handleCourseInputChange={handleCourseInputChange}
+        handleImageChange={handleImageChange}
+        handleAddCourse={handleAddCourse}
+      />
       <Typography variant="h5" className="my-5">
         Courses List
       </Typography>
-      {courses.map((course) => (
-        <div
-          key={course.id}
-          className="mb-5 p-5 border border-gray-200 rounded-md"
-        >
-          <Typography variant="h6" className="mb-2">
-            {course.title}
-          </Typography>
-          <div className="flex gap-2">
-            <Button
-              variant="contained"
-              className="bg-red-500 hover:bg-red-600 text-white"
-              onClick={() => handleDeleteCourse(course.id)}
-            >
-              Delete Course
-            </Button>
-            <Button
-              variant="contained"
-              className="bg-blue-500 hover:bg-blue-600 text-white"
-              onClick={() => fetchCourseLessons(course.id)}
-            >
-              View Lessons
-            </Button>
-          </div>
-          {selectedCourse === course.id && (
-            <div className="mt-5">
-              <Box
-                component="form"
-                noValidate
-                autoComplete="off"
-                className="space-y-5"
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <TextField
-                    label="Lesson Title"
-                    name="title"
-                    value={newLesson.title}
-                    onChange={handleLessonInputChange}
-                    fullWidth
-                  />
-                  <TextField
-                    label="Content"
-                    name="content"
-                    value={newLesson.content}
-                    onChange={handleLessonInputChange}
-                    fullWidth
-                    multiline
-                    maxRows={4}
-                  />
-                  <Button
-                    variant="contained"
-                    component="label"
-                    className="bg-blue-500 hover:bg-blue-600 text-white"
-                  >
-                    Upload Video
-                    <input
-                      type="file"
-                      name="video"
-                      accept="video/*"
-                      hidden
-                      onChange={(e) => handleFileChange(e, "video")}
-                    />
-                  </Button>
-                  <Button
-                    variant="contained"
-                    component="label"
-                    className="bg-blue-500 hover:bg-blue-600 text-white"
-                  >
-                    Upload Images
-                    <input
-                      type="file"
-                      name="images"
-                      accept="image/*"
-                      multiple
-                      hidden
-                      onChange={(e) => handleFileChange(e, "images")}
-                    />
-                  </Button>
-                  <Button
-                    variant="contained"
-                    component="label"
-                    className="bg-blue-500 hover:bg-blue-600 text-white"
-                  >
-                    Upload Files
-                    <input
-                      type="file"
-                      name="files"
-                      multiple
-                      hidden
-                      onChange={(e) => handleFileChange(e, "files")}
-                    />
-                  </Button>
-                  <Button
-                    variant="contained"
-                    component="label"
-                    className="bg-blue-500 hover:bg-blue-600 text-white"
-                  >
-                    Upload Documents
-                    <input
-                      type="file"
-                      name="documents"
-                      multiple
-                      hidden
-                      onChange={(e) => handleFileChange(e, "documents")}
-                    />
-                  </Button>
-                </div>
-                <Button
-                  variant="contained"
-                  className="bg-green-500 hover:bg-green-600 text-white"
-                  onClick={() => handleAddLesson(course.id)}
-                >
-                  Add Lesson
-                </Button>
-              </Box>
-              <Typography variant="h6" className="mt-5">
-                Lessons List
-              </Typography>
-              {lessons.map((lesson) => (
-                <div
-                  key={lesson.id}
-                  className="mb-3 p-3 border border-gray-200 rounded-md"
-                >
-                  <Typography variant="body1" className="mb-2">
-                    {lesson.title}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    className="bg-red-500 hover:bg-red-600 text-white"
-                    onClick={() => handleDeleteLesson(lesson.id, course.id)}
-                  >
-                    Delete Lesson
-                  </Button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      ))}
+      <CourseList
+        courses={courses}
+        fetchCourseLessons={fetchCourseLessons}
+        handleDeleteCourse={handleDeleteCourse}
+        openEditCourseDialog={openEditCourseDialog}
+      />
+      {selectedCourse && (
+        <LessonForm
+          newLesson={newLesson}
+          handleLessonInputChange={handleLessonInputChange}
+          handleFileChange={handleFileChange}
+          handleAddLesson={handleAddLesson}
+          selectedCourse={selectedCourse}
+        />
+      )}
+      {selectedCourse && (
+        <LessonList
+          lessons={lessons}
+          selectedCourse={selectedCourse}
+          handleDeleteLesson={handleDeleteLesson}
+          openEditLessonDialog={openEditLessonDialog}
+        />
+      )}
+      <EditCourseDialog
+        editCourse={editCourse}
+        categories={categories}
+        handleUpdateCourse={handleUpdateCourse}
+        setEditCourse={setEditCourse}
+      />
+      <EditLessonDialog
+        editLesson={editLesson}
+        handleUpdateLesson={handleUpdateLesson}
+        setEditLesson={setEditLesson}
+      />
     </div>
   );
+};
+
+const initialCourseState = {
+  title: "",
+  short_desc: "",
+  description: "",
+  category: "",
+  price: "",
+  duration: "",
+  image: null,
+};
+
+const initialLessonState = {
+  title: "",
+  content: "",
+  video: [],
+  images: [],
+  files: [],
+  documents: [],
 };
 
 export default CoursesManagement;
