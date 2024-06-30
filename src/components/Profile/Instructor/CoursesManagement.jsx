@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Box, Button, Grid } from "@mui/material";
+import { Typography } from "@mui/material";
 import { toast } from "react-toastify";
 import {
   addCourse,
@@ -130,7 +130,8 @@ const CoursesManagement = ({ user }) => {
     try {
       const lessonsData = await getCourseLessons(courseId);
       setLessons(lessonsData);
-      setSelectedCourse(courseId);
+      const course = courses.find((course) => course.id === courseId);
+      setSelectedCourse(course);
     } catch (error) {
       console.error("Error fetching lessons:", error);
       toast.error("Error fetching lessons");
@@ -180,10 +181,10 @@ const CoursesManagement = ({ user }) => {
     });
 
     try {
-      await updateLesson(selectedCourse, editLesson.id, formData);
+      await updateLesson(selectedCourse.id, editLesson.id, formData);
       toast.success("Lesson updated successfully");
       setEditLesson(null);
-      fetchCourseLessons(selectedCourse);
+      fetchCourseLessons(selectedCourse.id);
     } catch (error) {
       console.error("Error updating lesson:", error.response?.data);
       toast.error("Error updating lesson");
@@ -220,21 +221,21 @@ const CoursesManagement = ({ user }) => {
         openEditCourseDialog={openEditCourseDialog}
       />
       {selectedCourse && (
-        <LessonForm
-          newLesson={newLesson}
-          handleLessonInputChange={handleLessonInputChange}
-          handleFileChange={handleFileChange}
-          handleAddLesson={handleAddLesson}
-          selectedCourse={selectedCourse}
-        />
-      )}
-      {selectedCourse && (
-        <LessonList
-          lessons={lessons}
-          selectedCourse={selectedCourse}
-          handleDeleteLesson={handleDeleteLesson}
-          openEditLessonDialog={openEditLessonDialog}
-        />
+        <>
+          <LessonForm
+            newLesson={newLesson}
+            handleLessonInputChange={handleLessonInputChange}
+            handleFileChange={handleFileChange}
+            handleAddLesson={handleAddLesson}
+            selectedCourse={selectedCourse}
+          />
+          <LessonList
+            lessons={lessons}
+            selectedCourse={selectedCourse}
+            handleDeleteLesson={handleDeleteLesson}
+            openEditLessonDialog={openEditLessonDialog}
+          />
+        </>
       )}
       <EditCourseDialog
         editCourse={editCourse}
