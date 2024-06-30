@@ -7,7 +7,14 @@ import {
   Button,
   TextField,
   Grid,
+  Tooltip,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
 } from "@mui/material";
+import { InfoRounded } from "@mui/icons-material";
 
 const EditLessonDialog = ({
   editLesson,
@@ -26,6 +33,19 @@ const EditLessonDialog = ({
     }));
   };
 
+  const renderFileList = (files, title) => (
+    <>
+      <Typography variant="subtitle1">{title}</Typography>
+      <List>
+        {files.map((file, index) => (
+          <ListItem key={index}>
+            <ListItemText primary={file.name || file} />
+          </ListItem>
+        ))}
+      </List>
+    </>
+  );
+
   return (
     <Dialog
       open={Boolean(editLesson)}
@@ -33,7 +53,14 @@ const EditLessonDialog = ({
       fullWidth
       maxWidth="sm"
     >
-      <DialogTitle>Edit Lesson</DialogTitle>
+      <div className="w-full flex justify-between items-center p-4">
+        <DialogTitle>Edit Lesson</DialogTitle>
+        <Tooltip title="You can re-upload media files if needed.">
+          <IconButton>
+            <InfoRounded />
+          </IconButton>
+        </Tooltip>
+      </div>
       <DialogContent>
         {editLesson && (
           <>
@@ -56,18 +83,22 @@ const EditLessonDialog = ({
               rows={4}
             />
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              {editLesson.video &&
+                renderFileList([editLesson.video], "Existing Video")}
+              <Grid item xs={12}>
                 <Button variant="contained" component="label" fullWidth>
                   Upload Video
                   <input
                     type="file"
                     hidden
-                    multiple
                     onChange={(e) => handleFileChange(e, "video")}
                   />
                 </Button>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              {Array.isArray(editLesson.images) &&
+                editLesson.images.length > 0 &&
+                renderFileList(editLesson.images, "Existing Images")}
+              <Grid item xs={12}>
                 <Button variant="contained" component="label" fullWidth>
                   Upload Images
                   <input
@@ -78,7 +109,10 @@ const EditLessonDialog = ({
                   />
                 </Button>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              {Array.isArray(editLesson.files) &&
+                editLesson.files.length > 0 &&
+                renderFileList(editLesson.files, "Existing Files")}
+              <Grid item xs={12}>
                 <Button variant="contained" component="label" fullWidth>
                   Upload Files
                   <input
@@ -89,7 +123,10 @@ const EditLessonDialog = ({
                   />
                 </Button>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              {Array.isArray(editLesson.documents) &&
+                editLesson.documents.length > 0 &&
+                renderFileList(editLesson.documents, "Existing Documents")}
+              <Grid item xs={12}>
                 <Button variant="contained" component="label" fullWidth>
                   Upload Documents
                   <input

@@ -10,6 +10,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Typography,
 } from "@mui/material";
 
 const EditCourseDialog = ({
@@ -96,7 +97,18 @@ const EditCourseDialog = ({
               value={editCourse.price}
               onChange={handleInputChange}
               margin="normal"
+              required
             />
+            {editCourse.image && (
+              <Typography variant="subtitle1">
+                Existing Image:
+                <img
+                  src={editCourse.image}
+                  alt={editCourse.title}
+                  className="h-80 w-full"
+                />
+              </Typography>
+            )}
             <Button variant="contained" component="label" sx={{ mt: 2 }}>
               Upload Image
               <input type="file" hidden onChange={handleImageChange} />
