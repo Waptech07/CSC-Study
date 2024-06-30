@@ -34,13 +34,21 @@ const InstructorSettings = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      <h2 className="font-semibold text-4xl text-center">Settings</h2>
-      <Tabs value={tabIndex} onChange={handleTabChange} centered>
+      <h2 className="font-semibold lg:text-4xl text-2xl text-center">
+        Settings
+      </h2>
+      <Tabs
+        value={tabIndex}
+        onChange={handleTabChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        sx={{ marginX: "20px" }}
+      >
         <Tab label="Profile" />
         <Tab label="Change Password" />
         <Tab label="Manage Courses" />
       </Tabs>
-      <Box className="m-5">
+      <Box className="my-5 mx-0 lg:mx-5">
         {tabIndex === 0 && <ProfileUpdate profile={profile} />}
         {tabIndex === 1 && <PasswordChange />}
         {tabIndex === 2 && <CoursesManagement user={user} />}

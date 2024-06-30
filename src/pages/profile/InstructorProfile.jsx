@@ -10,7 +10,7 @@ const InstructorProfile = () => {
 
   return (
     <section className="bg-gray-100">
-      <div className="flex flex-wrap lg:flex-nowrap p-10 items-start"> {/* Use flex-wrap for responsive design */}
+      <div className="flex flex-wrap lg:flex-nowrap md:p-10 sm:p-5 items-start"> {/* Use flex-wrap for responsive design */}
         <InstructorInfo />
         <div className="flex-1"> {/* Ensure it takes available space */}
           <div className="flex gap-5 pb-2 pl-5">

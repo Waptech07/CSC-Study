@@ -34,7 +34,7 @@ const ViewInstructor = () => {
   return (
     <section className="bg-gray-100">
       <div>
-        <div className="flex flex-wrap lg:flex-nowrap lg:p-10 p-5 items-start">
+        <div className="flex flex-wrap lg:flex-nowrap md:p-10 sm:p-5 items-start">
           <div className="flex flex-col justify-center items-center w-full lg:w-1/3 bg-white shadow-md rounded-lg py-10 gap-5">
             <img
               src={
@@ -46,34 +46,36 @@ const ViewInstructor = () => {
                   : "https://via.placeholder.com/150")
               }
               alt="Instructor"
-              className="rounded-full w-60 h-60"
+              className="rounded-full md:w-60 md:h-60 w-40 h-40"
             />
             <div className="flex flex-col justify-center items-center">
-              <p className="text-black font-bold text-3xl">
+              <p className="text-black font-bold md:text-3xl text-2xl capitalize">
                 {instructor?.user.name}
               </p>
-              <p className="text-gray-500 font-semibold text-lg">
+              <p className="text-gray-500 font-semibold md:text-lg text-base">
                 {instructor?.user.profession}
               </p>
             </div>
             <hr className="w-10/12 h-px bg-gray-400 border-0 px-10 my-5" />
             <div className="px-10">
-              <h2 className="text-gray-800 font-bold text-lg mb-3">About Me</h2>
-              <p className="text-gray-500 font-medium text-base">
+              <h2 className="text-gray-800 font-bold md:text-lg text-base mb-3">
+                About Me
+              </h2>
+              <p className="text-gray-500 font-medium md:text-base text-[15px]">
                 {instructor?.user.bio}
               </p>
             </div>
             <hr className="w-10/12 h-px bg-gray-400 border-0 px-10 my-5" />
             <div className="flex justify-between items-center gap-8">
               <div className="flex flex-col items-center">
-                <div className="rounded-full text-4xl p-5 bg-orange-200 text-orange-800">
+                <div className="rounded-full sm:text-4xl text-3xl sm:p-5 p-4 bg-orange-200 text-orange-800">
                   <FaStar />
                 </div>
                 <p className="text-xl text-gray-700 font-semibold">5.0</p>
                 <p className="text-sm text-gray-400 font-medium">Ratings</p>
               </div>
               <div className="flex flex-col items-center">
-                <div className="rounded-full text-4xl p-5 bg-green-200 text-green-800">
+                <div className="rounded-full sm:text-4xl text-3xl sm:p-5 p-4 bg-green-200 text-green-800">
                   <FaUsers />
                 </div>
                 <p className="text-xl text-gray-700 font-semibold">200</p>
@@ -82,7 +84,7 @@ const ViewInstructor = () => {
                 </p>
               </div>
               <div className="flex flex-col items-center">
-                <div className="rounded-full text-4xl p-5 bg-blue-200 text-blue-800">
+                <div className="rounded-full sm:text-4xl text-3xl sm:p-5 p-4 bg-blue-200 text-blue-800">
                   <FaBookOpen />
                 </div>
                 <p className="text-xl text-gray-700 font-semibold">
@@ -93,10 +95,10 @@ const ViewInstructor = () => {
             </div>
             <hr className="w-10/12 h-px bg-gray-400 border-0 px-10 my-5" />
             <div className="px-10">
-              <h2 className="text-gray-800 font-bold text-lg mb-3">
+              <h2 className="text-gray-800 font-bold md:text-lg text-base mb-3">
                 Biography
               </h2>
-              <p className="text-gray-500 font-medium text-base">
+              <p className="text-gray-500 font-medium md:text-base text-[15px]">
                 {instructor?.biography}
               </p>
             </div>

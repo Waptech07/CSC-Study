@@ -46,12 +46,14 @@ const InstructorInfo = () => {
             ? URL.createObjectURL(profilePicture)
             : `${user?.profile_picture}`
         }
-        className="rounded-full w-60 h-60"
+        className="rounded-full md:w-60 md:h-60 w-40 h-40"
         alt="profile-image"
       />
       <div className="flex flex-col justify-center items-center">
-        <p className="text-black font-bold text-3xl">{user?.name}</p>
-        <p className="text-gray-500 font-semibold text-lg">
+        <p className="text-black font-bold md:text-3xl text-2xl capitalize">
+          {user?.name}
+        </p>
+        <p className="text-gray-500 font-semibold md:text-lg text-base">
           {user?.profession}
         </p>
       </div>
@@ -79,16 +81,18 @@ const InstructorInfo = () => {
             <FaStar />
           </div>
           <p className="text-xl text-gray-700 font-semibold">5.0</p>
-          <p className="text-sm md:text-xs text-center text-gray-400 font-medium">Ratings</p>
+          <p className="text-sm md:text-xs text-center text-gray-400 font-medium">
+            Ratings
+          </p>
         </div>
         <div className="flex flex-col items-center justify-center">
           <div className="rounded-full text-4xl p-5 bg-green-200 text-green-800">
             <FaUsers />
           </div>
-          <p className="text-xl text-gray-700 font-semibold">
-            200
+          <p className="text-xl text-gray-700 font-semibold">200</p>
+          <p className="text-sm md:text-xs text-center text-gray-400 font-medium">
+            Students Learning
           </p>
-          <p className="text-sm md:text-xs text-center text-gray-400 font-medium">Students Learning</p>
         </div>
         <div className="flex flex-col items-center  justify-center">
           <div className="rounded-full text-4xl p-5 bg-blue-200 text-blue-800">
@@ -97,7 +101,9 @@ const InstructorInfo = () => {
           <p className="text-xl text-gray-700 font-semibold">
             {instructorDetails?.courses?.length}
           </p>
-          <p className="text-sm md:text-xs text-center text-gray-400 font-medium">Courses</p>
+          <p className="text-sm md:text-xs text-center text-gray-400 font-medium">
+            Courses
+          </p>
         </div>
       </div>
       <hr className="w-10/12 h-px bg-gray-400 border-0 px-10 my-5" />

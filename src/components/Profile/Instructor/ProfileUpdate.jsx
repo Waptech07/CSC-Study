@@ -12,6 +12,7 @@ const ProfileUpdate = () => {
   const [phone, setPhone] = useState(user?.phone || "");
   const [address, setAddress] = useState(user?.address || "");
   const [nationality, setNationality] = useState(user?.nationality || "");
+  const [bio, setBio] = useState(user?.bio || "");
   const [profilePicture, setProfilePicture] = useState(null);
 
   const handleUpdateChanges = async () => {
@@ -22,6 +23,7 @@ const ProfileUpdate = () => {
       address,
       nationality,
       phone,
+      bio,
     };
 
     try {
@@ -79,7 +81,7 @@ const ProfileUpdate = () => {
               : `${user?.profile_picture}`
           }
           alt="User"
-          className="w-60 rounded-full border cursor-pointer"
+          className="md:w-60 w-40 rounded-full border cursor-pointer"
         />
         <input
           accept="image/*"
@@ -130,6 +132,14 @@ const ProfileUpdate = () => {
           value={nationality}
           onChange={(e) => setNationality(e.target.value)}
           fullWidth
+        />
+        <TextField
+          label="About Me"
+          value={bio}
+          onChange={(e) => setBio(e.target.value)}
+          fullWidth
+          multiline
+          maxRows={3}
         />
       </div>
       <Button variant="contained" onClick={handleUpdateChanges}>
