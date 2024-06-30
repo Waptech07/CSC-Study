@@ -1,5 +1,12 @@
 import React from "react";
-import { TextField, Button, Box, Grid, Typography } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Box,
+  Grid,
+  Typography,
+  Tooltip,
+} from "@mui/material";
 
 const LessonForm = ({
   newLesson,
@@ -11,7 +18,7 @@ const LessonForm = ({
   return (
     <Box component="form" noValidate autoComplete="off" sx={{ mb: 5 }}>
       <Typography variant="h5" className="mt-5 mb-2">
-        Add Lesson
+        Add Lesson to {selectedCourse.title}
       </Typography>
       <TextField
         fullWidth
@@ -20,6 +27,7 @@ const LessonForm = ({
         value={newLesson.title}
         onChange={handleLessonInputChange}
         margin="normal"
+        placeholder="Enter lesson title"
       />
       <TextField
         fullWidth
@@ -30,51 +38,59 @@ const LessonForm = ({
         margin="normal"
         multiline
         rows={4}
+        placeholder="Enter lesson content"
       />
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <Button variant="contained" component="label" fullWidth>
-            Upload Video
-            <input
-              type="file"
-              hidden
-              multiple
-              onChange={(e) => handleFileChange(e, "video")}
-            />
-          </Button>
+          <Tooltip title="Upload a video file">
+            <Button variant="contained" component="label" fullWidth>
+              Upload Video
+              <input
+                type="file"
+                hidden
+                onChange={(e) => handleFileChange(e, "video")}
+              />
+            </Button>
+          </Tooltip>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Button variant="contained" component="label" fullWidth>
-            Upload Images
-            <input
-              type="file"
-              hidden
-              multiple
-              onChange={(e) => handleFileChange(e, "images")}
-            />
-          </Button>
+          <Tooltip title="Upload image files">
+            <Button variant="contained" component="label" fullWidth>
+              Upload Images
+              <input
+                type="file"
+                hidden
+                multiple
+                onChange={(e) => handleFileChange(e, "images")}
+              />
+            </Button>
+          </Tooltip>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Button variant="contained" component="label" fullWidth>
-            Upload Files
-            <input
-              type="file"
-              hidden
-              multiple
-              onChange={(e) => handleFileChange(e, "files")}
-            />
-          </Button>
+          <Tooltip title="Upload additional files">
+            <Button variant="contained" component="label" fullWidth>
+              Upload Files
+              <input
+                type="file"
+                hidden
+                multiple
+                onChange={(e) => handleFileChange(e, "files")}
+              />
+            </Button>
+          </Tooltip>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Button variant="contained" component="label" fullWidth>
-            Upload Documents
-            <input
-              type="file"
-              hidden
-              multiple
-              onChange={(e) => handleFileChange(e, "documents")}
-            />
-          </Button>
+          <Tooltip title="Upload document files">
+            <Button variant="contained" component="label" fullWidth>
+              Upload Documents
+              <input
+                type="file"
+                hidden
+                multiple
+                onChange={(e) => handleFileChange(e, "documents")}
+              />
+            </Button>
+          </Tooltip>
         </Grid>
       </Grid>
       <Button
