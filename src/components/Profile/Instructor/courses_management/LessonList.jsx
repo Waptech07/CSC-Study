@@ -1,5 +1,6 @@
 import React from "react";
-import { Typography, Box, Button, Grid } from "@mui/material";
+import { Typography, Box, Button, Grid, Tooltip } from "@mui/material";
+import { School } from "@mui/icons-material";
 
 const LessonList = ({
   lessons,
@@ -10,37 +11,55 @@ const LessonList = ({
   return (
     <Box>
       <Typography variant="h5" className="mt-5 mb-2">
-        Lessons for
+        Lessons for {selectedCourse.title}
       </Typography>
-      {lessons.map((lesson) => (
-        <Box
-          key={lesson.id}
-          className="border border-gray-300 rounded-md p-4 my-2"
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={8}>
-              <Typography variant="h6">{lesson.title}</Typography>
-              <Typography>{lesson.content}</Typography>
-            </Grid>
-            <Grid item xs={4} className="flex items-center justify-end">
-              <Button
-                variant="contained"
-                onClick={() => openEditLessonDialog(lesson)}
-                sx={{ mr: 1 }}
-              >
-                Edit
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => handleDeleteLesson(lesson.id, selectedCourse)}
-              >
-                Delete
-              </Button>
-            </Grid>
-          </Grid>
+      {lessons.length === 0 ? (
+        <Box className="flex flex-col items-center justify-center py-10">
+          <School color="action" style={{ fontSize: 60 }} />
+          <Typography variant="h6" className="mt-3">
+            No lessons available for this course.
+          </Typography>
         </Box>
-      ))}
+      ) : (
+        lessons.map((lesson) => (
+          <Box
+            key={lesson.id}
+            className="border border-gray-300 rounded-md p-4 my-2"
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={8}>
+                <Typography variant="h6">{lesson.title}</Typography>
+                <Typography>{lesson.content}</Typography>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                md={4}
+                className="flex items-center justify-end"
+              >
+                <Button
+                  variant="contained"
+                  onClick={() => openEditLessonDialog(lesson)}
+                  sx={{ mr: 1 }}
+                >
+                  Edit
+                </Button>
+                <Tooltip title="Delete this lesson">
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() =>
+                      handleDeleteLesson(lesson.id, selectedCourse)
+                    }
+                  >
+                    Delete
+                  </Button>
+                </Tooltip>
+              </Grid>
+            </Grid>
+          </Box>
+        ))
+      )}
     </Box>
   );
 };
