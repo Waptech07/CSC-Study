@@ -7,6 +7,7 @@ import {
   MenuItem,
   Button,
   Box,
+  Tooltip,
 } from "@mui/material";
 
 const CourseForm = ({
@@ -25,6 +26,7 @@ const CourseForm = ({
         value={newCourse.title}
         onChange={handleCourseInputChange}
         margin="normal"
+        placeholder="Enter course title (200 Max Characters)"
       />
       <TextField
         fullWidth
@@ -33,6 +35,7 @@ const CourseForm = ({
         value={newCourse.short_desc}
         onChange={handleCourseInputChange}
         margin="normal"
+        placeholder="Enter a brief description (100 Max Characters)"
       />
       <TextField
         fullWidth
@@ -43,6 +46,7 @@ const CourseForm = ({
         margin="normal"
         multiline
         rows={4}
+        placeholder="Enter detailed description"
       />
       <TextField
         fullWidth
@@ -51,6 +55,7 @@ const CourseForm = ({
         value={newCourse.duration}
         onChange={handleCourseInputChange}
         margin="normal"
+        placeholder="Enter duration in the format HH:MM:SS"
       />
       <FormControl fullWidth margin="normal">
         <InputLabel>Category</InputLabel>
@@ -68,16 +73,19 @@ const CourseForm = ({
       </FormControl>
       <TextField
         fullWidth
-        label="Price"
+        label="Price(NGN)"
         name="price"
         value={newCourse.price}
         onChange={handleCourseInputChange}
         margin="normal"
+        placeholder="Enter price in NGN"
       />
-      <Button variant="contained" component="label" sx={{ mt: 2 }}>
-        Upload Image
-        <input type="file" hidden onChange={handleImageChange} />
-      </Button>
+      <Tooltip title="Upload an image for the course">
+        <Button variant="contained" component="label" sx={{ mt: 2 }}>
+          Upload Image
+          <input type="file" hidden onChange={handleImageChange} />
+        </Button>
+      </Tooltip>
       <Button
         variant="contained"
         color="primary"
