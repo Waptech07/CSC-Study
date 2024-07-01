@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import { getInstructorDetailsByUserId } from "../../../services/coursesApi";
+import { Link } from "react-router-dom";
 
 const InstructorCourses = () => {
   const { user } = useContext(AuthContext);

@@ -55,7 +55,7 @@ const EditLessonDialog = ({
     >
       <div className="w-full flex justify-between items-center p-4">
         <DialogTitle>Edit Lesson</DialogTitle>
-        <Tooltip title="You can re-upload media files if needed.">
+        <Tooltip title="You have re-upload / upload all media files.">
           <IconButton>
             <InfoRounded />
           </IconButton>

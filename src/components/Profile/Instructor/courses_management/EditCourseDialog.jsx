@@ -11,7 +11,10 @@ import {
   Select,
   MenuItem,
   Typography,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
+import { InfoRounded } from "@mui/icons-material";
 
 const EditCourseDialog = ({
   editCourse,
@@ -38,7 +41,14 @@ const EditCourseDialog = ({
       fullWidth
       maxWidth="sm"
     >
-      <DialogTitle>Edit Course</DialogTitle>
+      <div className="w-full flex justify-between items-center p-4">
+        <DialogTitle>Edit Course</DialogTitle>
+        <Tooltip title="You have re-upload / upload all media files.">
+          <IconButton>
+            <InfoRounded />
+          </IconButton>
+        </Tooltip>
+      </div>
       <DialogContent>
         {editCourse && (
           <>
