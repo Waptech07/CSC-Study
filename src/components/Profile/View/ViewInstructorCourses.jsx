@@ -56,7 +56,7 @@ const ViewInstructorCourses = () => {
     <div className="lg:w-11/12 lg:pl-10 sm:px-0 px-10">
       <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-8">
         {currentCourses.map((course, index) => (
-          <Link to={`/courses/${course.id}`}>
+          <Link to={`/courses/${course.slug}`}>
             <div
               key={index}
               className="bg-white hover:shadow-md rounded-lg transition-transform transform"

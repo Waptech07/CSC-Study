@@ -56,31 +56,33 @@ const InstructorCourses = () => {
     <div className="lg:w-11/12 lg:pl-10 sm:px-0 px-10">
       <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-8 md:px-0 md:py-0 py-5">
         {currentCourses.map((course, index) => (
-          <div
-            key={index}
-            className="bg-white hover:shadow-md rounded-lg transition-transform transform"
-          >
-            <img
-              src={
-                course.image
-                  ? `${course.image}`
-                  : "https://via.placeholder.com/150"
-              }
-              className="w-full h-60 rounded-t-lg mb-3"
-              alt={course.title}
-            />
-            <div className="px-2 py-4">
-              <h3 className="text-gray-800 font-bold text-xl mb-3">
-                {course.title}
-              </h3>
-              <p className="text-gray-500 font-medium text-base mb-2">
-                {timeAgo(course.created_at)}
-              </p>
-              <p className="text-gray-800 font-semibold text-lg">
-                &#8358;{parseFloat(course.price).toLocaleString()}
-              </p>
+          <Link to={`/courses/${course.slug}`}>
+            <div
+              key={index}
+              className="bg-white hover:shadow-md rounded-lg transition-transform transform"
+            >
+              <img
+                src={
+                  course.image
+                    ? `${course.image}`
+                    : "https://via.placeholder.com/150"
+                }
+                className="w-full h-60 rounded-t-lg mb-3"
+                alt={course.title}
+              />
+              <div className="px-2 py-4">
+                <h3 className="text-gray-800 font-bold text-xl mb-3">
+                  {course.title}
+                </h3>
+                <p className="text-gray-500 font-medium text-base mb-2">
+                  {timeAgo(course.created_at)}
+                </p>
+                <p className="text-gray-800 font-semibold text-lg">
+                  &#8358;{parseFloat(course.price).toLocaleString()}
+                </p>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
       <div className="flex justify-center mt-6">
