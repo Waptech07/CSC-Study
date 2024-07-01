@@ -24,16 +24,18 @@ export const getCourseDetails = async (courseSlug) => {
 
 export const getCourseReviews = async (courseId) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/course/${courseId}/reviews/`);
+    const response = await axios.get(
+      `${API_BASE_URL}/course/${courseId}/reviews/`
+    );
     return response.data;
   } catch (error) {
-    console.error('Error fetching course reviews:', error);
+    console.error("Error fetching course reviews:", error);
     throw error;
   }
 };
 
 export const addCourseReview = async (courseId, reviewData) => {
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem("access_token");
   try {
     const response = await axios.post(
       `${API_BASE_URL}/course/${courseId}/reviews/`,
@@ -46,7 +48,7 @@ export const addCourseReview = async (courseId, reviewData) => {
     );
     return response.data;
   } catch (error) {
-    console.error('Error adding course review:', error);
+    console.error("Error adding course review:", error);
     throw error;
   }
 };
@@ -373,6 +375,44 @@ export const completeLesson = async (courseId, lessonId) => {
     return response.data;
   } catch (error) {
     console.error("Error completing lesson:", error);
+    throw error;
+  }
+};
+
+export const getQuizDetails = async (lessonId) => {
+  const token = localStorage.getItem("access_token");
+
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/lesson/${lessonId}/quizzes/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching quiz details:", error);
+    throw error;
+  }
+};
+
+export const submitQuizAnswers = async (lessonId, quizSlug, answers) => {
+  const token = localStorage.getItem("access_token");
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/lesson/${lessonId}/quiz/${quizSlug}/`,
+      { user_answers: answers }, // Ensure 'answers' is sent under the correct key
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error submitting quiz answers:", error);
     throw error;
   }
 };
