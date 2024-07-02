@@ -97,7 +97,7 @@ const LessonForm = ({
         variant="contained"
         color="primary"
         sx={{ mt: 2 }}
-        onClick={() => handleAddLesson(selectedCourse)}
+        onClick={() => handleAddLesson(selectedCourse.id)}
       >
         Add Lesson
       </Button>

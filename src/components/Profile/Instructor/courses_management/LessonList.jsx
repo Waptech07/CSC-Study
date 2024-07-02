@@ -49,7 +49,7 @@ const LessonList = ({
                     variant="contained"
                     color="secondary"
                     onClick={() =>
-                      handleDeleteLesson(lesson.id, selectedCourse)
+                      handleDeleteLesson(lesson.id, selectedCourse.id)
                     }
                   >
                     Delete
