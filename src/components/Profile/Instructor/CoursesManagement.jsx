@@ -11,6 +11,10 @@ import {
   getInstructorDetailsByUserId,
   updateCourse,
   updateLesson,
+  addQuiz,
+  updateQuiz,
+  deleteQuiz,
+  getQuizList,
 } from "../../../services/coursesApi";
 import CourseForm from "./courses_management/CourseForm";
 import LessonForm from "./courses_management/LessonForm";
@@ -18,6 +22,7 @@ import CourseList from "./courses_management/CourseList";
 import LessonList from "./courses_management/LessonList";
 import EditCourseDialog from "./courses_management/EditCourseDialog";
 import EditLessonDialog from "./courses_management/EditLessonDialog";
+import QuizList from "./courses_management/QuizList";
 
 const CoursesManagement = ({ user }) => {
   const [instructor, setInstructor] = useState(null);
@@ -29,10 +34,11 @@ const CoursesManagement = ({ user }) => {
   const [lessons, setLessons] = useState([]);
   const [editCourse, setEditCourse] = useState(null);
   const [editLesson, setEditLesson] = useState(null);
+  const [quizzes, setQuizzes] = useState([]);
 
   useEffect(() => {
-    fetchCourses();
     fetchCategories();
+    fetchCourses();
   }, []);
 
   const fetchCourses = async () => {
@@ -199,9 +205,59 @@ const CoursesManagement = ({ user }) => {
     setEditLesson(lesson);
   };
 
+  const handleAddQuiz = async (lessonId, quizData) => {
+    try {
+      const response = await addQuiz(lessonId, quizData);
+      setQuizzes((prevQuizzes) => [...prevQuizzes, response]);
+      toast.success("Quiz added successfully");
+    } catch (error) {
+      console.error("Error adding quiz:", error);
+      toast.error("Error adding quiz");
+    }
+  };
+
+  const handleUpdateQuiz = async (lessonId, quizSlug, quizData) => {
+    try {
+      await updateQuiz(lessonId, quizSlug, quizData);
+      toast.success("Quiz updated successfully");
+    } catch (error) {
+      console.error("Error updating quiz:", error);
+      toast.error("Error updating quiz");
+    }
+  };
+
+  const handleDeleteQuiz = async (lessonId, quizSlug) => {
+    try {
+      await deleteQuiz(lessonId, quizSlug);
+      setQuizzes((prevQuizzes) =>
+        prevQuizzes.filter((quiz) => quiz.slug !== quizSlug)
+      );
+      toast.success("Quiz deleted successfully");
+    } catch (error) {
+      console.error("Error deleting quiz:", error);
+      toast.error("Error deleting quiz");
+    }
+  };
+
+  useEffect(() => {
+    if (lessons && lessons.length > 0) {
+      fetchQuizList(lessons[0].id);
+    }
+  }, [lessons]);
+
+  const fetchQuizList = async (lessonId) => {
+    try {
+      const quizzesData = await getQuizList(lessonId);
+      setQuizzes(quizzesData);
+    } catch (error) {
+      console.error("Error fetching quizzes:", error);
+      toast.error("Error fetching quizzes");
+    }
+  };
+
   return (
     <div className="bg-white p-5 sm:p-10 rounded-md flex flex-col gap-5">
-      <Typography variant="h5" className="mb-5">
+      <Typography variant="h5" component="h1" gutterBottom>
         Manage Courses
       </Typography>
       <CourseForm
@@ -235,18 +291,27 @@ const CoursesManagement = ({ user }) => {
             handleDeleteLesson={handleDeleteLesson}
             openEditLessonDialog={openEditLessonDialog}
           />
+          {lessons && lessons.length > 0 && (
+            <QuizList
+              lessonId={lessons[0].id}
+              quizzes={quizzes}
+              handleAddQuiz={handleAddQuiz}
+              handleUpdateQuiz={handleUpdateQuiz}
+              handleDeleteQuiz={handleDeleteQuiz}
+            />
+          )}
         </>
       )}
       <EditCourseDialog
         editCourse={editCourse}
-        categories={categories}
-        handleUpdateCourse={handleUpdateCourse}
         setEditCourse={setEditCourse}
+        handleUpdateCourse={handleUpdateCourse}
+        categories={categories}
       />
       <EditLessonDialog
         editLesson={editLesson}
-        handleUpdateLesson={handleUpdateLesson}
         setEditLesson={setEditLesson}
+        handleUpdateLesson={handleUpdateLesson}
       />
     </div>
   );
