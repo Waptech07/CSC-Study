@@ -32,6 +32,7 @@ const CoursesManagement = ({ user }) => {
   const [newLesson, setNewLesson] = useState(initialLessonState);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [lessons, setLessons] = useState([]);
+  const [selectedLesson, setSelectedLesson] = useState(null);
   const [editCourse, setEditCourse] = useState(null);
   const [editLesson, setEditLesson] = useState(null);
   const [quizzes, setQuizzes] = useState([]);
@@ -240,10 +241,10 @@ const CoursesManagement = ({ user }) => {
   };
 
   useEffect(() => {
-    if (lessons && lessons.length > 0) {
-      fetchQuizList(lessons[0].id);
+    if (selectedLesson) {
+      fetchQuizList(selectedLesson.id);
     }
-  }, [lessons]);
+  }, [selectedLesson]);
 
   const fetchQuizList = async (lessonId) => {
     try {
@@ -288,12 +289,14 @@ const CoursesManagement = ({ user }) => {
           <LessonList
             lessons={lessons}
             selectedCourse={selectedCourse}
+            selectedLesson={selectedLesson}
+            setSelectedLesson={setSelectedLesson}
             handleDeleteLesson={handleDeleteLesson}
             openEditLessonDialog={openEditLessonDialog}
           />
-          {lessons && lessons.length > 0 && (
+          {selectedLesson && (
             <QuizList
-              lessonId={lessons[0].id}
+              selectedLesson={selectedLesson}
               quizzes={quizzes}
               handleAddQuiz={handleAddQuiz}
               handleUpdateQuiz={handleUpdateQuiz}
