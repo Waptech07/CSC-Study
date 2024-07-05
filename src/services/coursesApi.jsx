@@ -379,7 +379,101 @@ export const completeLesson = async (courseId, lessonId) => {
   }
 };
 
-export const getQuizDetails = async (lessonId) => {
+export const addQuiz = async (lessonId, quizData) => {
+  const token = localStorage.getItem("access_token");
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/lesson/${lessonId}/quiz/`,
+      quizData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error adding quiz:", error);
+    throw error;
+  }
+};
+
+export const updateQuiz = async (lessonId, quizSlug, quizData) => {
+  const token = localStorage.getItem("access_token");
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/lesson/${lessonId}/quiz/${quizSlug}/`,
+      quizData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating quiz:", error);
+    throw error;
+  }
+};
+
+export const deleteQuiz = async (lessonId, quizSlug) => {
+  const token = localStorage.getItem("access_token");
+  try {
+    const response = await axios.delete(
+      `${API_BASE_URL}/lesson/${lessonId}/quiz/${quizSlug}/delete/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting quiz:", error);
+    throw error;
+  }
+};
+
+export const fetchQuizDetails = async (lessonId, quizSlug) => {
+  const token = localStorage.getItem("access_token");
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/lesson/${lessonId}/quiz/${quizSlug}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching quiz details:", error);
+    throw error;
+  }
+};
+
+export const submitQuiz = async (lessonId, quizSlug, answers) => {
+  const token = localStorage.getItem("access_token");
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/lesson/${lessonId}/quiz/${quizSlug}/submit/`,
+      { answers },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error submitting quiz:", error);
+    throw error;
+  }
+};
+
+
+export const getQuizList = async (lessonId) => {
   const token = localStorage.getItem("access_token");
 
   try {
