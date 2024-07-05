@@ -1,10 +1,18 @@
 import React from "react";
-import { Typography, Box, Button, Grid, Tooltip } from "@mui/material";
+import {
+  Typography,
+  Box,
+  Button,
+  Grid,
+  Tooltip,
+} from "@mui/material";
 import { School } from "@mui/icons-material";
 
 const LessonList = ({
   lessons,
   selectedCourse,
+  selectedLesson,
+  setSelectedLesson,
   handleDeleteLesson,
   openEditLessonDialog,
 }) => {
@@ -37,10 +45,20 @@ const LessonList = ({
                 md={4}
                 className="flex items-center justify-end"
               >
+                <Tooltip title="Manage quiz">
+                  <Button
+                    variant="contained"
+                    color="warning"
+                    selected={selectedLesson && selectedLesson.id === lesson.id}
+                    onClick={() => setSelectedLesson(lesson)}
+                  >
+                    Quiz
+                  </Button>
+                </Tooltip>
                 <Button
                   variant="contained"
                   onClick={() => openEditLessonDialog(lesson)}
-                  sx={{ mr: 1 }}
+                  sx={{ mx: 1 }}
                 >
                   Edit
                 </Button>
