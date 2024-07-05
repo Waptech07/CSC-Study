@@ -4,7 +4,7 @@ import {
   getLessonDetails,
   getCourseDetails,
   completeLesson,
-  getQuizDetails,
+  getQuizList,
   submitQuizAnswers,
 } from "../../services/coursesApi";
 import Loading from "../../components/Loading";
@@ -41,7 +41,7 @@ const LessonDetails = () => {
         setLoading(false);
 
         // Fetch quiz details (assuming quizData is an array with a single object)
-        const quizDataArray = await getQuizDetails(lessonData.id);
+        const quizDataArray = await getQuizList(lessonData.id);
         const quizData = quizDataArray.length > 0 ? quizDataArray[0] : null;
         if (quizData) {
           setQuiz({
